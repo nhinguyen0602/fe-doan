@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
     //redirect to home if logged
     if (this.authService.currentUser) {
-      this.router.navigate[('/welcome')];
+      this.router.navigate[('/project')];
     }
   }
 
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
         console.log('Email: ' + profile.getEmail());
         this.authService.loginGoogle(googleUser.getAuthResponse().id_token)
         .subscribe((data)=>{
-          this.ngZone.run(() =>  this.router.navigate(['/welcome'])).then();
+          this.ngZone.run(() =>  this.router.navigate(['/project'])).then();
           let token = data.accessToken;
           localStorage.setItem('currentUser',token);
           }

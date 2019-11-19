@@ -51,7 +51,7 @@
             <button nz-button [nzType]="'danger'" (click)="reject(data)"
             [disabled]="!checkStatus(data.status.name)"><span>Reject</span></button>
             <nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
-              (nzOnOk)="rejectedDayOff(dayoff)">
+              (nzOnOk)="rejectedDayOff(data.id)">
               <p>Do you want reject request!</p>
             </nz-modal>
           </td>

@@ -15,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @NgModule({
   declarations: [],
@@ -35,7 +36,8 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
     NzBadgeModule,
     ReactiveFormsModule,
     NzCollapseModule,
-    NzEmptyModule
+    NzEmptyModule,
+    NzSpinModule
   ]
 })
 export class AppMaterialModule {

@@ -10,7 +10,7 @@ import { environment } from "src/environments/environment";
 export class ShowUserService {
   constructor(private http: HttpClient, private tokenService: TokenService) {}
 
-  getListProfile(): Observable<Profile[]> {
+  getListProfile(): Observable<Profile[]> { 
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: "Bearer " + this.tokenService.getToken

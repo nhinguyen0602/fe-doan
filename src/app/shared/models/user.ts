@@ -1,5 +1,3 @@
-import { Skill } from './skill';
-
 export class User {
     id: number;
     idUser: number;
@@ -13,7 +11,6 @@ export class User {
     sex: boolean;
     address: string;
     starting_day: Date;
-    skill: Skill;
     status: boolean;
     token: string;
     enable: boolean

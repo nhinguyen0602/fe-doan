@@ -8,16 +8,10 @@ const routes: Routes = [
   { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) },
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule) },
   { path: 'dayoff', loadChildren: () => import('./pages/dayoff/dayoff.module').then(m => m.DayoffModule) },
+  { path: 'project', loadChildren: () => import('./pages/project/project/project.module').then(m => m.ProjectModule) },
   { path: 'dayofftype', loadChildren: () => import('./pages/dayofftype/dayofftype.module').then(m => m.DayofftypeModule) },
-  { path: 'categoríe', loadChildren: () => import('./pages/category/category.module').then(m => m.CategoryModule)},
-  { path: 'skills', loadChildren: () => import('./pages/skill/skill.module').then(m => m.SkillModule)},
-  { path: 'profile/:id', loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule) },
-  { path: 'categoríe', loadChildren: () => import('./pages/category/category.module').then(m => m.CategoryModule) },
-  { path: 'skills', loadChildren: () => import('./pages/skill/skill.module').then(m => m.SkillModule) },
-  { path: 'management', loadChildren: () => import('./pages/management/magement.module').then(m => m.MagementModule) },
-  { path: 'admin-request', loadChildren: () => import('./pages/admin-request/admin-request.module').then(m => m.AdminRequestModule), canActivate: [AdminGuard]},
-  { path: 'request-type', loadChildren: () => import('./pages/request-type/request-type.module').then(m => m.RequestTypeModule), canActivate: [AdminGuard]},
-  { path: 'user-request', loadChildren: () => import('./pages/request-user/request-user.module').then(m => m.RequestUserModule)}
+  // { path: 'profile/:id', loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule) },
+  // { path: 'management', loadChildren: () => import('./pages/management/magement.module').then(m => m.MagementModule) },
 ];
 
 @NgModule({
