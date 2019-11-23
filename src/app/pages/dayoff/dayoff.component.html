@@ -40,20 +40,12 @@
             </div>
           </td>
           <td>
-            <button nz-button [nzType]="'primary'" (click)="showModalDayOff(data)"
+            <button nz-button [nzType]="'primary'" (click)="showModalDayOff(data.id)"
             [disabled]="!checkStatus(data.status.name)"><span>Accept</span></button>
-            <nz-modal [(nzVisible)]="isVisibleDayOff" nzTitle="" (nzOnCancel)="handleCancelDayOff()"
-              (nzOnOk)="acceptDayOff(data.id)" >
-              <p>Do you want accept request!</p>
-            </nz-modal>
           </td>
           <td>
-            <button nz-button [nzType]="'danger'" (click)="reject(data)"
-            [disabled]="!checkStatus(data.status.name)"><span>Reject</span></button>
-            <nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
-              (nzOnOk)="rejectedDayOff(data.id)">
-              <p>Do you want reject request!</p>
-            </nz-modal>
+            <button nz-button [nzType]="'danger'" (click)="reject(data.id)"
+            [disabled]="!checkStatus(data.status.name)"><span>Reject</span></button>       
           </td>
         </tr>
       </tbody>
@@ -61,3 +53,13 @@
   </ng-template>
   </nz-collapse-panel>
 </nz-collapse>
+
+<nz-modal [(nzVisible)]="isVisibleDayOff" nzTitle="" (nzOnCancel)="handleCancelDayOff()"
+(nzOnOk)="acceptDayOff(data.id)" >
+<p>Do you want accept request!</p>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
+              (nzOnOk)="rejectedDayOff(data.id)">
+              <p>Do you want reject request!</p>
+            </nz-modal>

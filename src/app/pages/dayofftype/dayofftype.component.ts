@@ -74,5 +74,9 @@ export class DayofftypeComponent implements OnInit {
   handleCancelEdit(): void {
     this.isVisibleEdit = false;
   }
+  checkData(name:string){
+    name=name.trim();
+    return name!='';
+  }
 
 }

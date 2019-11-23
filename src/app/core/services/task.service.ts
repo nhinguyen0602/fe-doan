@@ -1,0 +1,61 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { AlertService } from './alert.service';
+import { DayOff } from 'src/app/shared/models/day-off';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { Project } from 'src/app/shared/models/project';
+import { Card } from 'src/app/shared/models/card';
+import { Task } from 'src/app/shared/models/task';
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TaskService {
+
+  private taskUrl = environment.apiUrl + "/tasks"
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Context-Type': 'application/json',
+      'Authorization': 'Bearer '
+    })
+  };
+
+  constructor(
+    private http: HttpClient,
+    private alertService: AlertService
+  ) {
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      this.alertService.error(`${operation} failed: ${error.alertService}`);
+      return of(result as T);
+    }
+  }
+
+  getTaskByCard(id:number):Observable<Task[]>{
+    const url=`${this.taskUrl}/card/${id}`;
+    return this.http.get<Task[]>(url,this.httpOptions).pipe(
+      catchError(this.handleError<Task[]>('getTasksByCard'))
+    )
+  }
+  replaceTask(idOld:number,idNew:number,idCard:number):Observable<Task>{
+    const url=`${this.taskUrl}/replace_task/${idOld}/new_task/${idNew}/task/${idCard}`;
+    return this.http.put<Task>(url,this.httpOptions).pipe(
+      catchError(this.handleError<Task>('replaceTask'))
+    )
+  }
+
+  addTask(task:Task,id:number):Observable<Task>{
+    const url=`${this.taskUrl}/${id}`;
+    return this.http.post<Task>(url,task).pipe(
+      catchError(this.handleError<Task>('addTask'))
+    )
+  }
+
+}

@@ -16,6 +16,12 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 @NgModule({
   declarations: [],
@@ -37,7 +43,13 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     ReactiveFormsModule,
     NzCollapseModule,
     NzEmptyModule,
-    NzSpinModule
+    NzSpinModule,
+    NzCardModule,
+    NzIconModule,
+    NzTabsModule,
+    NzMentionModule,
+    NzAvatarModule,
+    NzAlertModule
   ]
 })
 export class AppMaterialModule {

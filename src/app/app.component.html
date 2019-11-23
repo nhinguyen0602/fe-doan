@@ -1,5 +1,5 @@
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+  <nz-sider class="menu-sidebar" *ngIf="isLogged()" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
     [nzTrigger]="null">
     <div  class="sidebar-logo">
       <a href="https://ng.ant.design/" target="_blank">
@@ -22,6 +22,11 @@
         <ul>
             <li nz-menu-item nzMatchRouter>
                 <a routerLink="/dayoff">Day Off manage</a>
+            </li>
+        </ul>
+        <ul>
+            <li nz-menu-item nzMatchRouter>
+                <a routerLink="/project-admin">Project manage</a>
             </li>
         </ul>
         <ul>
@@ -52,7 +57,7 @@
         </span>
       </div>
     </nz-header>
-    <nz-content>
+    <nz-content >
       <div class="inner-content">
         <router-outlet></router-outlet>
       </div>

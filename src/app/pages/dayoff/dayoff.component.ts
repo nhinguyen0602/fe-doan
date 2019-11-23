@@ -52,19 +52,13 @@ export class DayoffComponent implements OnInit {
     this.dayOffService.getDayOffByUser(id, this.year).subscribe(data => this.data = data);
   }
 
-  delete(dayoff: DayOff): void {
-    this.dayOffService.deleteDayOff(dayoff).subscribe();
-  }
-
   isVisibleDayOff = false;
 
-  showModalDayOff(data: DayOff): void {
+  showModalDayOff(id: number): void {
     this.isVisibleDayOff = true;
-    const id = +data.id;
     this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
+    console.log(id)
   }
-
-  temp: DayOff;
 
   acceptDayOff(id: number): void {
     this.isVisibleDayOff = false;
@@ -77,9 +71,9 @@ export class DayoffComponent implements OnInit {
 
   isVisibleDayOff1 = false;
 
-  reject(data: DayOff): void {
+  reject(id: number): void {
     this.isVisibleDayOff1 = true;
-    const id = +data.id;
+    // const id = +data.id;
     this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
   }
 

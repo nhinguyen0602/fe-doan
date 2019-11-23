@@ -1,0 +1,74 @@
+<h1>{{project?.name}}</h1>
+<nz-modal [(nzVisible)]="isVisible" nzTitle="New Tab" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
+  <form nz-form [nzLayout]="'inline'" [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+    <div style="display: block;" class="form=form-group">
+      <nz-form-item style="display: block;">
+        <label style="padding-right: 22px;display: inline-block;"><br />name<span style="color: red;">(*)</span> </label>
+        <span><input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
+            formControlName="name" /></span>
+      </nz-form-item>
+    </div>
+  </form>
+</nz-modal>
+<nz-tabset [nzTabBarExtraContent]="extraTemplate">
+  <div *ngFor="let card of cards">
+    <nz-tab nzTitle="{{card.name}}" (nzClick)="getTasksByCard(card.id)">
+      <div *ngFor="let task of tasks">
+        <nz-card nzType="inner" style="margin-top:16px;" nzTitle="{{task.name}}" [nzExtra]="extraTask">
+          <a>{{task.description}}</a>
+          <ng-template #extraTask>
+              <nz-button-group>
+                <button nz-button nz-dropdown [nzDropdownMenu]="menu2" nzPlacement="bottomRight">
+                    <i nz-icon nzType="tag" nzTheme="outline"></i>
+                </button>
+              </nz-button-group>
+              <nz-dropdown-menu #menu2="nzDropdownMenu">
+                  <ul nz-menu>
+                      <div *ngFor="let card of cards">
+                    <li nz-menu-item (click)="setCard(card.id,task.id)">{{card.name}}</li>
+                    </div>
+                  </ul>
+                </nz-dropdown-menu>
+              <button nz-button style="margin-left: 15px;" (click)="showModal()">More</button>
+            </ng-template>
+        </nz-card>
+      </div>
+      <nz-card nzType="inner" style="margin-top:16px;text-align-last: center;" nzTitle="  " >
+          <i nz-icon (click)="showModalTask()" nzType="plus-circle" nzTheme="fill" style="font-size: 30px;color: rgb(51, 201, 247);"></i>
+      </nz-card>
+    </nz-tab>
+  </div>
+</nz-tabset>
+<ng-template #extraTemplate>
+  <button nz-button (click)="showModal()">New tab</button>
+</ng-template>
+<nz-modal style="text-align-last: center;"
+        [(nzVisible)]="isSuccess" [nzClosable]="false"
+      >
+      <nz-alert nzType="success" nzMessage="Success Tips" nzShowIcon></nz-alert>
+        <div style="text-align-last: center;" *nzModalFooter>
+            <!-- <button nz-button nzType="primary" (click)="handleSuccess()" [nzLoading]="isConfirmLoading" style="text-align-last: center;">OK</button> -->
+            <i nz-icon nzType="check-circle" (click)="handleSuccess()" nzTheme="fill" style="color: green; font-size: 30px;"></i>
+          </div>
+      </nz-modal>
+
+    <!-- addTask -->
+
+    <nz-modal [(nzVisible)]="isVisibleTask" nzTitle="New Task" (nzOnCancel)="handleCancelTask()" (nzOnOk)="onSubmitTask()">
+        <form nz-form [nzLayout]="'inline'" [formGroup]="requestFormTask" (ngSubmit)="onSubmit()">
+            <div style="display: block;" class="form=form-group">
+                <nz-form-item style="display: block;">
+                  <label style="padding-right: 22px;display: inline-block;"><br />name<span style="color: red;">(*)</span> </label>
+                  <span><input nz-input style=" margin-left: 45px; width: 300px; margin-top: 0px;display: inline-block;"
+                      formControlName="name" /></span>
+                </nz-form-item>
+              </div>
+              <div style="display: block;" class="form=form-group">
+                  <nz-form-item style="display: block;">
+                    <label style="padding-right: 22px;display: inline-block;"><br />description<span style="color: red;">(*)</span> </label>
+                    <span><input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
+                        formControlName="description" /></span>
+                  </nz-form-item>
+                </div>
+        </form>
+      </nz-modal>

@@ -1,19 +1,67 @@
-<div style="background: #ECECEC;padding:30px;">
-    <div nz-row [nzGutter]="8">
+<nz-modal [(nzVisible)]="isVisible" nzTitle="New Project" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
+  <form nz-form [nzLayout]="'inline'" [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+      <div style="display: block;" class="form=form-group">
+          <nz-form-item style="display: block;">
+            <label style="padding-right: 22px;display: inline-block;"><br />name<span style="color: red;">(*)</span> </label>
+            <span><input nz-input style=" margin-left: 45px; width: 300px; margin-top: 0px;display: inline-block;"
+                formControlName="name" /></span>
+          </nz-form-item>
+        </div>
+        <div style="display: block;" class="form=form-group">
+            <nz-form-item style="display: block;">
+              <label style="padding-right: 22px;display: inline-block;"><br />description<span style="color: red;">(*)</span> </label>
+              <span><input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
+                  formControlName="description" /></span>
+            </nz-form-item>
+          </div>
+  </form>
+</nz-modal>
+<button nz-button nzType="primary" nzGhost (click)="showModal()" >Create</button>
+<br>
+<br>
+
+<div >
+  <div nz-row [nzGutter]="32">
+    <div *ngFor="let project of projects">
       <div nz-col [nzSpan]="8">
-        <nz-card nzTitle="Card title">
-          <p>Card content</p>
+          <!-- (click)="getProject(project?.id)" -->
+        <nz-card [nzExtra]="extraTask" (click)="getProject(project?.id)" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" nzTitle="{{project.name}}" style="border-radius: 7px;padding: 3px;border-color:#B6D2C9;background:rgb(236, 248, 244),;">
+          <p>{{project?.description}}</p>
+          <div style="float: right;" *ngIf="project.status=='PENDING'">
+            <i nz-icon nzType="warning" nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 30px  ;"></i>
+          </div>
+          <div style="float: right;" *ngIf="project.status=='APPROVED'">
+              <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 30px  ;"></i>
+              <!-- <i nz-icon nzType="check-circle" nzTheme="fill"></i> -->
+            </div>
+          <div style="float: right;" *ngIf="project.status.name=='REJECTED'">
+              <i nz-icon nzType="check" nzTheme="outline" style="color: green;font-size: 30px  ;"></i>
+          </div>
+          <ng-template #extraTask>
+              <i nz-icon (click)="showModalMember(project?.id)" style="font-size: 24px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
+            </ng-template>
         </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card nzTitle="Card title">
-          <p>Card content</p>
-        </nz-card>
-      </div>
-      <div nz-col [nzSpan]="8">
-        <nz-card nzTitle="Card title">
-          <p>Card content</p>
-        </nz-card>
+        <br>
+        <br>
       </div>
     </div>
   </div>
+</div>
+
+
+<nz-modal [(nzVisible)]="isVisibleMember" nzTitle="Add Member" (nzOnCancel)="memberCancel()" (nzOnOk)="memberSubmit()">
+    <nz-mention nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect($event)" >
+        <input id="textzz" nzMentionTrigger nz-input [(ngModel)]="inputValue" (ngModelChange)="onChange($event)" />
+        <br>
+        <br>
+        <div *ngFor="let user of userOfProject">
+          <div style="display: block;border: 1px solid rgb(76, 189, 241);border-radius: 10px;padding: 5px;">
+            <nz-avatar nzIcon="user" style="background-color:#87d068;display: inline-block;">
+            </nz-avatar> 
+            <b><p style="margin-left: 10px; margin-top: 5px;display: inline-block;">{{user.email}}</p></b>
+            <i nz-icon nzType="close" nzTheme="outline" (click)="removeUser(user.email)" style="font-size: 20px; color: red;float: right;margin-top: 5px;display: inline-block;"></i>
+          </div>
+          <br>
+        </div>
+      </nz-mention>
+  </nz-modal>

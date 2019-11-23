@@ -1,0 +1,50 @@
+    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false" #nzTable [nzData]="data" >
+      <thead>
+        <tr>
+          <th nzCustomFilter>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Date create</th>
+          <th>Enable</th>
+          <th>Accept</th>
+          <th>Reject</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of nzTable.data">
+          <td>{{ data.id }}</td>
+          <td>{{data.name}}</td>
+          <td>{{data.description}}</td>
+          <td>{{ data.createAt | date:'dd/MM/yyyy'}}</td>   
+          <td>
+            <div *ngIf="data.status=='PENDING'">
+              <b style="color: darkorange;">Pending</b>
+            </div>
+            <div *ngIf="data.status=='APPROVED'">
+              <b style="color:forestgreen;">Approved</b>
+            </div>
+            <div *ngIf="data.status=='REJECTED'">
+              <b style="color:maroon;">Rejected</b>
+            </div>
+          </td>
+          <td>
+            <button nz-button [nzType]="'primary'" (click)="showModalDayOff(data.id)"
+            [disabled]="!checkStatus(data.status)"><span>Accept</span></button>
+          </td>
+          <td>
+            <button nz-button [nzType]="'danger'" (click)="reject(data.id)"
+            [disabled]="!checkStatus(data.status)"><span>Reject</span></button>       
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+<nz-modal [(nzVisible)]="isVisibleDayOff" nzTitle="" (nzOnCancel)="handleCancelDayOff()"
+(nzOnOk)="acceptDayOff()" >
+<p>Do you want accept request!</p>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
+              (nzOnOk)="rejectedDayOff()">
+              <p>Do you want reject request!</p>
+            </nz-modal>

@@ -15,8 +15,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import en from '@angular/common/locales/en';
+import { JwtModule } from '@auth0/angular-jwt';
 
 registerLocaleData(en);
+
+export function tokenGetter() {
+  return localStorage.getItem('currentUser');
+}
 
 @NgModule({
   declarations: [
@@ -38,7 +43,12 @@ registerLocaleData(en);
     NgZorroAntdModule,
     FormsModule,
     NzFormModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+      }
+    }),
   ],
   providers: [
     httpInterceptorProviders,

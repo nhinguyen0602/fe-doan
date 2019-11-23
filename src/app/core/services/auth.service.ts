@@ -2,20 +2,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from 'src/app/shared/models/user';
 import { HttpClient, HttpErrorResponse, HttpHandler, HttpHeaders } from '@angular/common/http';
-import { map, catchError, tap } from 'rxjs/operators';
 import { Token } from '../../shared/models/token';
 import { templateJitUrl } from '@angular/compiler';
 import { stringify } from 'querystring';
 import { NzAffixComponent, responsiveMap } from 'ng-zorro-antd';
 import { Profile } from 'src/app/shared/models/profile';
 import { environment } from 'src/environments/environment';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-
   serverUrl = environment.apiUrl + '/auth';
   errorData: {};
   redirectUrl: string;
@@ -23,15 +21,16 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(
+    private http: HttpClient,
+    public jwtHelper: JwtHelperService
+  ) {  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       console.error('An error occured: ', error.error.message);
     } else {
       console.log(error);
-      // console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`)
     }
     this.errorData = {
       errorTitle: 'Request failed',
@@ -83,5 +82,10 @@ export class AuthService {
     };
 
     return this.http.get<Profile>(`${environment.apiUrl}/profiles`, httpOptions);
+  }
+
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('currentUser');
+    return !this.jwtHelper.isTokenExpired(token);
   }
 }

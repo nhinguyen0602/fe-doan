@@ -1,3 +1,4 @@
+import { User } from './user';
 import {Status} from "./status";
 export class Project {
     id: number;
@@ -5,7 +6,8 @@ export class Project {
     description: string;
     createAt: Date;
     updateAt: Date;
-    status:Status;
+    userCreate:User;
+    status:string;
   
     // constructor(obj?: any) {
     //   Object.assign(this, obj);

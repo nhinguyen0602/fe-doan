@@ -40,7 +40,19 @@ export class UserService {
     )
   }
 
-  
+  isManage(id:number):Observable<boolean>{
+    const url = `${this.serverUrl}/is_manage/${id}`;
+    return this.http.get<boolean>(url,this.httOptions).pipe(
+      catchError(this.handleError<boolean>('isManage'))
+    )
+    }
+
+    getUserByProject(id:number):Observable<User[]>{
+      const url=`${this.serverUrl}/project/${id}`;
+      return this.http.get<User[]>(url).pipe(
+        catchError(this.handleError<User[]>('getUsers'))
+       )
+    }
   /** GET list items of user from server. Will 404 if id is not found */
 
 

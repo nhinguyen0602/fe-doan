@@ -21,7 +21,7 @@ export class WelcomeComponent implements OnInit {
   isVisible = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder:FormBuilder,
     private route: ActivatedRoute,
     private dayOffService: DayOffService,
     private typeService: TypeDayOffService,
@@ -29,9 +29,9 @@ export class WelcomeComponent implements OnInit {
   ) {
   }
 
-  get f() {
-    return this.requestForm.controls;
-  }
+    get f() {
+      return this.requestForm.controls;
+    }
 
   requestForm: FormGroup;
 
@@ -41,7 +41,7 @@ export class WelcomeComponent implements OnInit {
 
   authService: AuthService;
   router: Router;
-  data: DayOff[];
+  data: any[];
   types: TypeDay[];
   type: TypeDay;
   id: number;
@@ -105,16 +105,16 @@ export class WelcomeComponent implements OnInit {
       dayStartOff: new DatePipe('en-US').transform(valueForm.dayStartOff, 'yyyy-MM-ddTHH:mm:ss'),
       dayEndOff: new DatePipe('en-US').transform(valueForm.dayEndOff, 'yyyy-MM-ddTHH:mm:ss'),
     };
-    this.dayOffService.addDayOff(valueForm)
-      .pipe(first())
-      .subscribe(
-        data => {
-          this.alertService.success('successful');
-        },
-        error => {
-          this.alertService.error('error');
-        }
-      );
+    this.dayOffService.addDayOff(valueForm).subscribe(dayoff=>this.data=[...this.data,dayoff]);
+      // .pipe(first())
+      // .subscribe(
+      //   data => {
+      //     this.alertService.success('successful');
+      //   },
+      //   error => {
+      //     this.alertService.error('error');
+      //   }
+      // );
     this.isVisible = false;
   }
 
