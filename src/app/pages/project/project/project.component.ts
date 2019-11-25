@@ -1,3 +1,4 @@
+import { NzMessageService } from 'ng-zorro-antd';
 import { User } from 'src/app/shared/models/user';
 import { Component, OnInit } from '@angular/core';
 import { Project } from 'src/app/shared/models/project';
@@ -35,7 +36,8 @@ export class ProjectComponent implements OnInit {
     private formBuilder: FormBuilder,
     private alertService: AlertService,
     private router:Router, 
-    private userService:UserService  
+    private userService:UserService  ,
+    private nzMessageService: NzMessageService
   ) {}
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class ProjectComponent implements OnInit {
   public getProject(idProject:number): void {
     localStorage.setItem("project",idProject+'');
     this.idProjectCurrent=parseInt(localStorage.getItem("project"));
-    this.router.navigate(['/project-detal']);
+    // this.router.navigate(['/project-detal']);
   }
 
   isManage:boolean;
@@ -135,6 +137,10 @@ export class ProjectComponent implements OnInit {
   }
   memberSubmit():void{
     this.isVisibleMember=false;
+  }
+
+  cancel(): void {
+    this.nzMessageService.info('click cancel');
   }
 
 }

@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AlertService } from './alert.service';
-import { DayOff } from 'src/app/shared/models/day-off';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Project } from 'src/app/shared/models/project';
-import { Card } from 'src/app/shared/models/card';
 import { Task } from 'src/app/shared/models/task';
 
 
@@ -38,10 +35,17 @@ export class TaskService {
     }
   }
 
+  getTask(id:number):Observable<Task>{
+    const url=`${this.taskUrl}/${id}`;
+    return this.http.get<Task>(url,this.httpOptions).pipe(
+      catchError(this.handleError<Task>('getTask'))                              
+    )
+  }
+
   getTaskByCard(id:number):Observable<Task[]>{
     const url=`${this.taskUrl}/card/${id}`;
     return this.http.get<Task[]>(url,this.httpOptions).pipe(
-      catchError(this.handleError<Task[]>('getTasksByCard'))
+      catchError(this.handleError<Task[]>('getTasksByCard'))                              
     )
   }
   replaceTask(idOld:number,idNew:number,idCard:number):Observable<Task>{
@@ -57,5 +61,6 @@ export class TaskService {
       catchError(this.handleError<Task>('addTask'))
     )
   }
+
 
 }

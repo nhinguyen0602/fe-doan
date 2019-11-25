@@ -25,20 +25,32 @@
     <div *ngFor="let project of projects">
       <div nz-col [nzSpan]="8">
           <!-- (click)="getProject(project?.id)" -->
-        <nz-card [nzExtra]="extraTask" (click)="getProject(project?.id)" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" nzTitle="{{project.name}}" style="border-radius: 7px;padding: 3px;border-color:#B6D2C9;background:rgb(236, 248, 244),;">
-          <p>{{project?.description}}</p>
-          <div style="float: right;" *ngIf="project.status=='PENDING'">
-            <i nz-icon nzType="warning" nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 30px  ;"></i>
-          </div>
-          <div style="float: right;" *ngIf="project.status=='APPROVED'">
-              <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 30px  ;"></i>
-              <!-- <i nz-icon nzType="check-circle" nzTheme="fill"></i> -->
-            </div>
-          <div style="float: right;" *ngIf="project.status.name=='REJECTED'">
-              <i nz-icon nzType="check" nzTheme="outline" style="color: green;font-size: 30px  ;"></i>
+        <nz-card [nzExtra]="extraTask" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" [nzTitle]="title" style="border-radius: 7px;padding: 3px;border-color:#B6D2C9;background:rgb(236, 248, 244),;">
+            <ng-template #title>
+              <div *ngIf="project.status=='APPROVED'; else showError">
+                  <a (click)="getProject(project?.id)" [routerLink]="['/project-detal']" >{{project.name}}</a>
+              </div>
+              <ng-template #showError>
+                  <a [routerLink]="['/project']" nz-popconfirm
+                  nzPopconfirmTitle="The project has not been accepted yet"
+                  nzPopconfirmPlacement="top"
+                 >{{project.name}}</a>
+              </ng-template>
+              </ng-template>
+          <div style="display: block;">
+              <p style="display: inline-block;">{{project?.description}}</p>
+              <div style="float: right;display: inline-block;" *ngIf="project.status=='PENDING'">
+                  <i nz-icon nzType="warning"  nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 40px  ;" ></i>
+                </div>
+                <div style="float: right;display: inline-block;" *ngIf="project.status=='APPROVED'">
+                    <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 40px  ;" ></i>
+                  </div>
+                <div style="float: right;display: inline-block;" *ngIf="project.status.name=='REJECTED'">
+                    <i nz-icon nzType="check" nzTheme="outline" style="color: green;font-size: 40px  ;" ></i>
+                </div>
           </div>
           <ng-template #extraTask>
-              <i nz-icon (click)="showModalMember(project?.id)" style="font-size: 24px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
+              <i nz-icon (click)="showModalMember(project?.id)" style="font-size: 32px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
             </ng-template>
         </nz-card>
         <br>

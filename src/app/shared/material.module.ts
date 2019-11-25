@@ -22,6 +22,10 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzMentionModule } from 'ng-zorro-antd/mention';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 @NgModule({
   declarations: [],
@@ -49,7 +53,11 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     NzTabsModule,
     NzMentionModule,
     NzAvatarModule,
-    NzAlertModule
+    NzAlertModule,
+    NzCheckboxModule,
+    NzProgressModule,
+    NzPopoverModule,
+    NzPopconfirmModule
   ]
 })
 export class AppMaterialModule {
