@@ -26,6 +26,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzCommentModule } from 'ng-zorro-antd/comment';
 
 @NgModule({
   declarations: [],
@@ -57,7 +58,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzCheckboxModule,
     NzProgressModule,
     NzPopoverModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
+    NzCommentModule
   ]
 })
 export class AppMaterialModule {

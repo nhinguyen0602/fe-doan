@@ -1,3 +1,4 @@
+import { CommentService } from './../../core/services/comment.service';
 import { JobService } from './../../core/services/job.service';
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/core/services/project.service';
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 import { TaskService } from 'src/app/core/services/task.service';
 import { Task } from 'src/app/shared/models/task';
 import { Job } from 'src/app/shared/models/job';
+import { distanceInWords } from 'date-fns';
 
 @Component({
   selector: 'app-project-detail',
@@ -26,7 +28,8 @@ export class ProjectDetailComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private taskService: TaskService,
-    private jobService:JobService
+    private jobService:JobService,
+    private commentService:CommentService
   ) { }
 
   get f() {
@@ -112,6 +115,14 @@ export class ProjectDetailComponent implements OnInit {
     this.tasks = [];
     this.taskService.getTaskByCard(id).subscribe(data => {
       this.tasks = data
+      this.tasks.forEach((eachTask, index) => {
+        this.jobService.getProcess(eachTask.id).subscribe(process => {
+          this.tasks[index] = {
+            ...this.tasks[index],
+            process
+          }
+        })
+      })
     });
 
   }
@@ -203,7 +214,7 @@ export class ProjectDetailComponent implements OnInit {
     var data = this.jobService.getProcess(id).toPromise();
     console.log(data);
     return data;
-  }
+  }     
 
   logJob(id: number): void {
     var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
@@ -213,4 +224,37 @@ export class ProjectDetailComponent implements OnInit {
     })
   }
 
+  //comment
+  comments: any[] = [];
+  submitting = false;
+  user = {
+    author: 'Han Solo',
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+  };
+  inputValue = '';
+
+  handleSubmit(): void {
+    this.submitting = true;
+    const content = this.inputValue;
+    var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
+    this.commentService.addCommnet(idTask,content).subscribe();
+    this.inputValue = '';
+    setTimeout(() => {
+      this.submitting = false;
+      this.comments = [
+        ...this.comments,
+        {
+          ...this.user,
+          content,
+          datetime: new Date(),
+          displayTime: distanceInWords(new Date(), new Date())
+        }
+      ].map(e => {
+        return {
+          ...e,
+          displayTime: distanceInWords(new Date(), e.datetime)
+        };
+      });
+    }, 800);
+  }
 }

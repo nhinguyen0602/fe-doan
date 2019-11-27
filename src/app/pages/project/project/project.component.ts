@@ -62,15 +62,12 @@ export class ProjectComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log("vo day");
     this.submitted = true;
     if (this.requestForm.invalid) {
       this.isVisible = false;
-      console.log("vo day1");
       return;
     }
     let valueForm = this.requestForm.value
-    console.log(valueForm)
     this.projectService.addProject(valueForm).subscribe(project=>this.projects=[...this.projects,project]);
     this.isVisible = false;
   }
@@ -80,7 +77,6 @@ export class ProjectComponent implements OnInit {
   public getProject(idProject:number): void {
     localStorage.setItem("project",idProject+'');
     this.idProjectCurrent=parseInt(localStorage.getItem("project"));
-    // this.router.navigate(['/project-detal']);
   }
 
   isManage:boolean;
@@ -97,7 +93,6 @@ export class ProjectComponent implements OnInit {
       for( this.i=0 ;this.i<users.length;this.i++){
         this.suggestions[this.i]=users[this.i].email
       }
-      console.log(this.suggestions)
 
     });
   }
@@ -121,7 +116,6 @@ export class ProjectComponent implements OnInit {
      localStorage.setItem("project",idProjectCurrent+'');
     this.userOfProject=[];  
     var id=parseInt(localStorage.getItem("project"));
-    console.log("id project:"+idProjectCurrent);
     this.userService.getUserByProject(id).subscribe(data=>this.userOfProject=data);
   }
 
