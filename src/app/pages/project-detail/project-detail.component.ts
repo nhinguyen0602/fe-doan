@@ -220,7 +220,11 @@ export class ProjectDetailComponent implements OnInit {
     var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
     console.log("hihi"+id);
     this.jobService.changeJob(id).subscribe(data=>{
-      // this.jobService.getJobByTask(idTask).subscribe(jobs=>this.jobs=jobs)
+      let indexTask=this.tasks.findIndex(e=> e.id==idTask);
+      this.jobService.getProcess(idTask).subscribe(value=>this.tasks[indexTask] = {
+        ...this.tasks[indexTask],
+        process: value
+      })
     })
   }
 
