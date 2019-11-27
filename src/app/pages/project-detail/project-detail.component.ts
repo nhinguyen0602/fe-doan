@@ -108,6 +108,7 @@ export class ProjectDetailComponent implements OnInit {
     var id = parseInt(localStorage.getItem("project"));
     this.cardService.addCard(valueForm, id).subscribe(card => this.cards = [...this.cards, card]);
     this.isVisible = false;
+    this.requestForm.reset();
   }
 
 
@@ -166,6 +167,7 @@ export class ProjectDetailComponent implements OnInit {
     var id = parseInt(localStorage.getItem("idCardCurrent"));
     this.taskService.addTask(valueForm, id).subscribe(data => this.tasks = [...this.tasks, data]);
     this.isVisibleTask = false;
+    this.requestFormTask.reset();
   }
 
 
@@ -201,7 +203,7 @@ export class ProjectDetailComponent implements OnInit {
     let valueForm = this.requestFormJob.value
     var id = parseInt(localStorage.getItem("idTaskCurrent"));
     this.jobService.addJob(id,valueForm).subscribe(data => this.jobs = [...this.jobs, data]);
-
+    this.requestFormJob.reset();
   }
 
   checkStatus(status:string){
