@@ -73,8 +73,13 @@ nz-content {
   margin: 24px;
 }
 
+.ant-layout-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .inner-content {
   padding: 24px;
   background: #fff;
-  height: 100%;
+  flex: 1;
 }
