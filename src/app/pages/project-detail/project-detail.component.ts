@@ -1,3 +1,4 @@
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommentService } from './../../core/services/comment.service';
 import { JobService } from './../../core/services/job.service';
 import { Component, OnInit } from '@angular/core';
@@ -176,12 +177,17 @@ export class ProjectDetailComponent implements OnInit {
 
   jobs:Job[]=[];
 
+
+  getCommentByTask(id:number){
+    this.commentService.getCommentByTask(id).subscribe(data=>this.comments=data)
+  }
+
   showModalJob(id: number): void {
     this.isVisibleJob = true;
     localStorage.setItem("idTaskCurrent", id + "");
     this.taskService.getTask(id).subscribe(task=>this.data=task)
     this.jobService.getJobByTask(id).subscribe(jobs=>this.jobs=jobs)
-    
+    this.getCommentByTask(id);
   }
 
   handleCancelJob() {
@@ -228,37 +234,28 @@ export class ProjectDetailComponent implements OnInit {
     })
   }
 
-  //comment
   comments: any[] = [];
   submitting = false;
-  user = {
-    author: 'Han Solo',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-  };
   inputValue = '';
 
   handleSubmit(): void {
     this.submitting = true;
     const content = this.inputValue;
     var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
-    this.commentService.addCommnet(idTask,content).subscribe();
+    this.commentService.addCommnet(idTask,content).subscribe(data=>{
+      this.getCommentByTask(idTask);
+    });
     this.inputValue = '';
-    setTimeout(() => {
-      this.submitting = false;
-      this.comments = [
-        ...this.comments,
-        {
-          ...this.user,
-          content,
-          datetime: new Date(),
-          displayTime: distanceInWords(new Date(), new Date())
-        }
-      ].map(e => {
-        return {
-          ...e,
-          displayTime: distanceInWords(new Date(), e.datetime)
-        };
-      });
-    }, 800);
+    this.submitting = false;
+    
+  }
+
+  //delete comment
+  cancel(): void {
+  }
+
+  confirm(id:number): void {
+    this.commentService.deleteComment(id).subscribe(data=>this.comments=data)
   }
 }
+//token pay load

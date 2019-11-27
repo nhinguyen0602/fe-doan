@@ -5,4 +5,5 @@ export class Job{
     createAt:Date;                  
     updateAt:Date;
     userCreate:User;
+    
 }

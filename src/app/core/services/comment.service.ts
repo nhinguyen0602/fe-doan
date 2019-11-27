@@ -40,17 +40,17 @@ export class CommentService {
     )
   }
 
-  addCommnet(id:number,content:string){
+  addCommnet(id:number,content:string):Observable<Comment>{
     const url=`${this.commentUrl}/task/${id}`;
     return this.http.post<Comment>(url,{content}).pipe(
       catchError(this.handleError<Comment>('addJob'))
     )
   }
 
-  deleteComment(id:number){
+  deleteComment(id:number):Observable<Comment[]>{
     const url=`${this.commentUrl}/${id}`;
-    return this.http.delete<Comment>(url,this.httpOptions).pipe(
-      catchError(this.handleError<Comment>('deleteComment'))
+    return this.http.delete<Comment[]>(url,this.httpOptions).pipe(
+      catchError(this.handleError<Comment[]>('deleteComment'))
     )
   }
 }

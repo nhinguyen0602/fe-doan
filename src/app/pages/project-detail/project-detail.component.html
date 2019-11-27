@@ -128,12 +128,35 @@
         <b style="display: inline-block;margin-left: 5px;">Comment</b>
     </div>
 
-    <div *ngFor="let comment of comments"></div>
-
+    <nz-list *ngIf="comments.length" [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+      <ng-template #item let-item>
+          <!-- [nzDatetime]="item.createAt" -->
+        <nz-comment [nzAuthor]="item?.userDTO.email" >
+          <nz-avatar
+        nz-comment-avatar
+        nzIcon="user"
+        nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+      ></nz-avatar>                             
+          <nz-comment-content style="display: block;">
+            <p style="display: inline-block;">{{ item.content }}</p>
+            <i nz-icon nzType="delete" nzTheme="fill" style="display: inline-block;float: right;" nz-popconfirm
+            nzPopconfirmTitle="Are you sure delete this comment?"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="confirm(item.id)"
+            (nzOnCancel)="cancel()"></i>
+            <i nz-icon nzType="edit" nzTheme="fill" style="display: inline-block;float: right;margin-right: 5px;"></i>
+          </nz-comment-content>
+        </nz-comment>
+      </ng-template>
+    </nz-list>
 
 
     <nz-comment>
-      <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
+      <nz-avatar
+        nz-comment-avatar
+        nzIcon="user"
+        nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+      ></nz-avatar>   
       <nz-comment-content>
         <nz-form-item>
             <input nz-input [(ngModel)]="inputValue" style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
@@ -144,36 +167,7 @@
       </nz-comment-content>
     </nz-comment>
   </ng-template>
-
-  <!-- --------------commment------------------ -->
-
-  
-
   <ng-template #modalFooter>
     <button nz-button nzType="default" (click)="handleCancelJob()">Close</button>
   </ng-template>
 </nz-modal>
-
-<!-- <nz-list *ngIf="comment.length" [nzDataSource]="comment" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
-  <ng-template #item let-item>
-    <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.displayTime">
-      <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
-      <nz-comment-content>
-        <p>{{ item.content }}</p>
-      </nz-comment-content>
-    </nz-comment>
-  </ng-template>
-</nz-list>
-<nz-comment>
-  <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="user.avatar"></nz-avatar>
-  <nz-comment-content>
-    <nz-form-item>
-      <textarea [(ngModel)]="inputValue" nz-input rows="4"></textarea>
-    </nz-form-item>
-    <nz-form-item>
-      <button nz-button nzType="primary" [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()">
-        Add Comment
-      </button>
-    </nz-form-item>
-  </nz-comment-content>
-</nz-comment> -->
