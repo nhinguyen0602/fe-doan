@@ -16,13 +16,23 @@
   <div *ngFor="let card of cards">
     <nz-tab nzTitle="{{card.name}}" (nzClick)="getTasksByCard(card.id)">
       <div *ngFor="let task of tasks">
-        <nz-card nzType="inner" style="margin-top:16px;" nzTitle="{{task.name}}" [nzExtra]="extraTask" [nzBordered]="true" style="border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
+        <nz-card nzType="inner" style="margin-top:16px;" nzTitle="{{task.name}}" [nzExtra]="extraTask"
+          [nzBordered]="true"
+          style="border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
           <div style="display: block;">
-          <a style="display: inline-block;">{{task.description}}</a>
-          <nz-progress nzType="line" [nzPercent]="task.process" [nzStrokeColor]="{ '0%': '#f44336', '100%': '#87d068' }"></nz-progress>
-        </div>
+            <ng-container *ngIf="currentTask!=task.id;else inputEditTask">
+              <a style="display: inline-block;">{{task.description}}</a>
+            </ng-container>
+            <ng-template style="display: block;" #inputEditTask>
+              <input type="text" nz-input nzSize="default" style="width: 300px;display:inline-block" [(ngModel)]="task.description"/>
+              <button nz-button style="display: inline-block;margin-left: 5px;" nzType="default" (click)="saveTask(task.id,task.description)" >Save</button>
+            </ng-template>
+            <!-- <a style="display: inline-block;">{{task.description}}</a> -->
+            <nz-progress nzType="line" [nzPercent]="task.process"
+              [nzStrokeColor]="{ '0%': '#f44336', '100%': '#87d068' }"></nz-progress>
+          </div>
           <ng-template #extraTask>
-            <!-- ------------------------------------ -->
+            <!-- --------------transfer task---------------------- -->
             <nz-button-group>
               <button nz-button nz-dropdown [nzDropdownMenu]="menu2" nzPlacement="bottomRight">
                 <i nz-icon nzType="tag" nzTheme="outline"></i>
@@ -35,15 +45,31 @@
                 </div>
               </ul>
             </nz-dropdown-menu>
-            <!-- -------------------------------------- -->
+
+            <!-- --------------edit delete task------------------------- -->
+            <button nz-button nz-dropdown style="margin-left: 15px;" [nzDropdownMenu]="menu">
+              <b>. . .</b> 
+              </button>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li nz-menu-item (click)="editTask(task.id)">Edit</li>
+                <li nz-menu-item nz-popconfirm
+                nzPopconfirmTitle="Are you sure delete this task?" nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="confirmDeleteTask(task.id)" (nzOnCancel)="cancel()">Delete</li>
+              </ul>
+            </nz-dropdown-menu>
+
+            <!-- ---------------show task----------------------- -->
             <button nz-button style="margin-left: 15px;" (click)="showModalJob(task.id)">More</button>
           </ng-template>
+
           <!-- show name task in dialog -->
           <!-- ---------------------------------------- -->
         </nz-card>
         <br>
       </div>
-      <nz-card nzType="inner" nzTitle="  " [nzBordered]="true" style="margin-top:16px;text-align-last: center;border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
+      <nz-card nzType="inner" nzTitle="  " [nzBordered]="true"
+        style="margin-top:16px;text-align-last: center;border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
         <i nz-icon (click)="showModalTask()" nzType="plus-circle" nzTheme="fill"
           style="font-size: 30px;color: rgb(51, 201, 247);"></i>
       </nz-card>
@@ -91,60 +117,69 @@
   [nzFooter]="modalFooter">
   <ng-template #modalTitle>
     <div style="display: block;"></div>
-      <i nz-icon nzType="home" nzTheme="outline" style="display: inline-block;font-size: 18px;"></i>
+    <i nz-icon nzType="home" nzTheme="outline" style="display: inline-block;font-size: 18px;"></i>
     <p style="display: inline-block;margin-left: 10px;">{{data?.name}}</p>
   </ng-template>
 
   <ng-template #modalContent>
     <div style="display: block;">
-        <i nz-icon nzType="unordered-list" nzTheme="outline" style="display: inline-block;"></i>
-        <b style="display: inline-block;margin-left: 5px;">Check list</b>
+      <i nz-icon nzType="unordered-list" nzTheme="outline" style="display: inline-block;"></i>
+      <b style="display: inline-block;margin-left: 5px;">Check list</b>
     </div>
     <nz-checkbox-wrapper style="width: 100%;" (nzOnChange)="myVariable =$event">
       <div nz-row>
         <div *ngFor="let job of jobs">
+          <div style="display: block;">
           <label nz-checkbox nzValue="{{job?.id}}" [ngModel]="checkStatus(job?.status)"
-            (click)="logJob(job.id)">{{job?.content}}</label>
+            (click)="logJob(job.id)" style="display: inline-block">{{job?.content}}</label>
+            <!-- <button nz-button style="display: inline-block;float:right">...</button> -->
+            <!-- <p style="display: inline-block;float:right;">...</p> -->
+          </div>
         </div>
       </div>
     </nz-checkbox-wrapper>
+    <br>
     <nz-collapse [nzBordered]="false">
-        <nz-collapse-panel [nzHeader]="hihi" [nzExpandedIcon]='double-right' [nzActive]="false" >
-    <form nz-form [nzLayout]="'inline'" [formGroup]="requestFormJob">
-      <div style="display: inline-block;" class="form=form-group">
-        <nz-form-item style="display: block;">
-          <input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
-            formControlName="content" />
-          <button nz-button (click)="submitJob()" style="display: inline-block;margin-left: 10px;margin-top: 5px;"
-            nzType="primary">Add</button>
-        </nz-form-item>
-      </div>
-    </form>
-  </nz-collapse-panel>
-  </nz-collapse>
+      <nz-collapse-panel [nzHeader]="header" [nzShowArrow]="false" [nzExpandedIcon]='double-right' [nzActive]="false">
+        <ng-template #header>
+          <button style="background-color: rgba(9,30,66,.04);box-shadow: none;border: none">Add an item</button>
+        </ng-template>
+        <form nz-form [nzLayout]="'inline'" [formGroup]="requestFormJob">
+          <div style="display: inline-block;" class="form=form-group">
+            <nz-form-item style="display: block;">
+              <input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
+                formControlName="content" />
+              <button nz-button (click)="submitJob()" style="display: inline-block;margin-left: 10px;margin-top: 5px;"
+                nzType="primary">Add</button>
+            </nz-form-item>
+          </div>
+        </form>
+      </nz-collapse-panel>
+    </nz-collapse>
     <br>
     <div style="display: block;">
-        <i nz-icon nzType="pushpin" nzTheme="outline" style="display: inline-block;"></i>
-        <b style="display: inline-block;margin-left: 5px;">Comment</b>
+      <i nz-icon nzType="menu" nzTheme="outline" style="display: inline-block;"></i>
+      <b style="display: inline-block;margin-left: 5px;">Comment</b>
     </div>
 
     <nz-list *ngIf="comments.length" [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
       <ng-template #item let-item>
-          <!-- [nzDatetime]="item.createAt" -->
-        <nz-comment [nzAuthor]="item?.userDTO.email" >
-          <nz-avatar
-        nz-comment-avatar
-        nzIcon="user"
-        nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-      ></nz-avatar>                             
+        <nz-comment [nzAuthor]="item?.userDTO.email" [nzDatetime]="displayTime(item.updateAt)">
+          <nz-avatar nz-comment-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
+          </nz-avatar>
           <nz-comment-content style="display: block;">
-            <p style="display: inline-block;">{{ item.content }}</p>
+              <ng-container *ngIf="currentComment!=item.id;else inputEdit">
+                  {{ item.content }}
+                </ng-container>
+                <ng-template style="display: block;" #inputEdit>
+                  <input type="text" nz-input nzSize="default" style="width: 300px;display:inline-block" [(ngModel)]="item.content"/>
+                  <button nz-button style="display: inline-block;margin-left: 5px;" nzType="primary" (click)="saveComment(item.id,item.content)">Save</button>
+                </ng-template>
+            <!-- <p style="display: inline-block;">{{ item.content }}</p> -->
             <i nz-icon nzType="delete" nzTheme="fill" style="display: inline-block;float: right;" nz-popconfirm
-            nzPopconfirmTitle="Are you sure delete this comment?"
-            nzPopconfirmPlacement="bottom"
-            (nzOnConfirm)="confirm(item.id)"
-            (nzOnCancel)="cancel()"></i>
-            <i nz-icon nzType="edit" nzTheme="fill" style="display: inline-block;float: right;margin-right: 5px;"></i>
+              nzPopconfirmTitle="Are you sure delete this comment?" nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="confirm(item.id)" (nzOnCancel)="cancel()"></i>
+            <i nz-icon nzType="edit" nzTheme="fill" style="display: inline-block;float: right;margin-right: 5px;" (click)="editComment(item.id)"></i>
           </nz-comment-content>
         </nz-comment>
       </ng-template>
@@ -152,17 +187,14 @@
 
 
     <nz-comment>
-      <nz-avatar
-        nz-comment-avatar
-        nzIcon="user"
-        nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-      ></nz-avatar>   
+      <nz-avatar nz-comment-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
+      </nz-avatar>
       <nz-comment-content>
         <nz-form-item>
-            <input nz-input [(ngModel)]="inputValue" style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
-            />
-          <button nz-button [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()"  style="display: inline-block;margin-left: 10px;margin-top: 5px;"
-            nzType="primary">Add</button>
+          <input nz-input [(ngModel)]="inputValue"
+            style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;" />
+          <button nz-button [nzLoading]="submitting" [disabled]="!inputValue" (click)="handleSubmit()"
+            style="display: inline-block;margin-left: 10px;margin-top: 5px;" nzType="primary">Add</button>
         </nz-form-item>
       </nz-comment-content>
     </nz-comment>

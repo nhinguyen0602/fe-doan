@@ -62,5 +62,19 @@ export class TaskService {
     )
   }
 
+  editTask(id:number,description:string):Observable<Task>{
+    const url=`${this.taskUrl}/${id}`;
+    return this.http.put<Task>(url,{description}).pipe(
+      catchError(this.handleError<Task>('editTask'))
+    )
+  }
+
+  deleteTask(id:number):Observable<Task[]>{
+    const url=`${this.taskUrl}/${id}`;
+    return this.http.delete<Task[]>(url).pipe(
+      catchError(this.handleError<Task[]>('deleteTask'))
+    )
+  }
+
 
 }

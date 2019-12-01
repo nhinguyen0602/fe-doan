@@ -33,6 +33,13 @@ export class CommentService {
       return of(result as T);
     }
   }
+
+  getComment(id:number):Observable<Comment>{
+    return this.http.get<Comment>(this.commentUrl).pipe(
+      catchError(this.handleError<Comment>('getComment'))
+    )
+  }
+
   getCommentByTask(id:number):Observable<Comment[]>{
     const url=`${this.commentUrl}/task/${id}`;
     return this.http.get<Comment[]>(url,this.httpOptions).pipe(
@@ -43,7 +50,14 @@ export class CommentService {
   addCommnet(id:number,content:string):Observable<Comment>{
     const url=`${this.commentUrl}/task/${id}`;
     return this.http.post<Comment>(url,{content}).pipe(
-      catchError(this.handleError<Comment>('addJob'))
+      catchError(this.handleError<Comment>('addComment'))
+    )
+  }
+
+  updateComment(id:number,content:string):Observable<Comment>{
+    const url=`${this.commentUrl}/edit/${id}`;
+    return this.http.put<Comment>(url,{content}).pipe(
+      catchError(this.handleError<Comment>('editComment'))
     )
   }
 

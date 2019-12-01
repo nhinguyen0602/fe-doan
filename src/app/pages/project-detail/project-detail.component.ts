@@ -1,3 +1,5 @@
+import { Task } from './../../shared/models/task';
+import { Comment } from './../../shared/models/comment';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommentService } from './../../core/services/comment.service';
 import { JobService } from './../../core/services/job.service';
@@ -10,7 +12,6 @@ import { UserService } from 'src/app/core/services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TaskService } from 'src/app/core/services/task.service';
-import { Task } from 'src/app/shared/models/task';
 import { Job } from 'src/app/shared/models/job';
 import { distanceInWords } from 'date-fns';
 
@@ -129,6 +130,24 @@ export class ProjectDetailComponent implements OnInit {
 
   }
 
+  confirmDeleteTask(id:number){
+    this.taskService.deleteTask(id).subscribe(data=>this.tasks=data)
+  }
+
+  currentTask:number=0;
+  task:Task
+  
+  editTask(id:number){
+    // this.taskService.editTask(id,task).subscribe(data=>this.task=data)
+    this.currentTask=id;
+  }
+
+  saveTask(id:number,description:string){
+    this.currentTask=0;
+    this.taskService.editTask(id,description).subscribe(data=>this.task=data)
+
+  }
+
   log(): void {
     console.log('click dropdown button');
   }
@@ -237,16 +256,29 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   comments: any[] = [];
+   comment:Comment
   submitting = false;
   inputValue = '';
+  currentComment:number=0;
+  
+
+  editComment(id:number){
+     this.currentComment=id;
+     console.log(this.currentComment)
+  }
+
+  saveComment(id:number,content:string){
+    this.commentService.updateComment(id,content).subscribe(data=>this.comment=data)
+    this.currentComment=0;
+    console.log(this.currentComment);
+    
+  }
 
   handleSubmit(): void {
     this.submitting = true;
     const content = this.inputValue;
     var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
-    this.commentService.addCommnet(idTask,content).subscribe(data=>{
-      this.getCommentByTask(idTask);
-    });
+    this.commentService.addCommnet(idTask,content).subscribe(data=>this.comments=[...this.comments,data])
     this.inputValue = '';
     this.submitting = false;
     
@@ -259,5 +291,9 @@ export class ProjectDetailComponent implements OnInit {
   confirm(id:number): void {
     this.commentService.deleteComment(id).subscribe(data=>this.comments=data)
   }
+
+ displayTime(date:Date){
+   return distanceInWords(new Date(),date);
+ }
 }
 //token pay load

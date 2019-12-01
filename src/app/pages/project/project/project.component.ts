@@ -70,6 +70,7 @@ export class ProjectComponent implements OnInit {
     let valueForm = this.requestForm.value
     this.projectService.addProject(valueForm).subscribe(project=>this.projects=[...this.projects,project]);
     this.isVisible = false;
+    this.requestForm.reset();
   }
 
   idProjectCurrent:number;
