@@ -45,8 +45,8 @@
                 <div style="float: right;display: inline-block;" *ngIf="project.status=='APPROVED'">
                     <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 40px  ;" ></i>
                   </div>
-                <div style="float: right;display: inline-block;" *ngIf="project.status.name=='REJECTED'">
-                    <i nz-icon nzType="check" nzTheme="outline" style="color: green;font-size: 40px  ;" ></i>
+                <div style="float: right;display: inline-block;" *ngIf="project.status=='REJECTED'">
+                    <i nz-icon nzType="close-circle" nzTheme="fill" style="color: rgb(216, 24, 24);font-size: 40px  ;" ></i>
                 </div>
           </div>
           <ng-template #extraTask>
