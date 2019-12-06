@@ -15,6 +15,21 @@ const routes: Routes = [
   { path: 'project', loadChildren: () => import('./pages/project/project/project.module').then(m => m.ProjectModule) },
   { path: 'project-detal', loadChildren: () => import('./pages/project-detail/project-detail.module').then(m => m.ProjectDetailModule) },
   { path: 'dayofftype', loadChildren: () => import('./pages/dayofftype/dayofftype.module').then(m => m.DayofftypeModule) },
+  {
+    path: "profile/:id",
+    loadChildren: () =>
+      import("./pages/profile/profile.module").then(m => m.ProfileModule)
+  },
+  {
+    path: "categories",
+    loadChildren: () =>
+      import("./pages/category/category.module").then(m => m.CategoryModule)
+  },
+  {
+    path: "skills",
+    loadChildren: () =>
+      import("./pages/skill/skill.module").then(m => m.SkillModule)
+  },
 ];
 
 @NgModule({

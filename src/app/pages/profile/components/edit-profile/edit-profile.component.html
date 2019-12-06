@@ -1,0 +1,110 @@
+<div *ngIf="profile != null; else profileNull">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="first-name">*First name</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input
+        required
+        nz-input
+        name="first name"
+        type="text"
+        id="first-name"
+        placeholder="Your first name"
+        value="{{ profile.firstName }}"
+        [(ngModel)]="profile.firstName"
+        (ngModelChange)="onChange()"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="last-name">*Last name</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input
+        required
+        nz-input
+        name="last name"
+        type="text"
+        id="last-name"
+        placeholder="Your fisrt name"
+        value="{{ profile.lastName }}"
+        [(ngModel)]="profile.lastName"
+        (ngModelChange)="onChange()"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*Address</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input
+        required
+        nz-input
+        name="address"
+        type="text"
+        id="address"
+        placeholder="Your address"
+        value="{{ profile.address }}"
+        [(ngModel)]="profile.address"
+        (ngModelChange)="onChange()"
+      />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*Age</nz-form-label>
+    <nz-form-control requiredtrue [nzSpan]="14">
+      <nz-input-number
+        [(ngModel)]="profile.age"
+        [nzMin]="1"
+        [nzMax]="100"
+        [nzStep]="1"
+        (ngModelChange)="onChange()"
+      >
+      </nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*Gender</nz-form-label>
+    <div nzSpan="14">
+      <nz-select
+        requiredtrue
+        [(ngModel)]="profile.sex"
+        (ngModelChange)="onChange()"
+        style="min-width: 92px;"
+      >
+        <nz-option nzValue="male" nzLabel="Male"></nz-option>
+        <nz-option nzValue="female" nzLabel="Female"></nz-option>
+        <nz-option nzValue="other" nzLabel="Other"></nz-option>
+      </nz-select>
+    </div>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*BirthDay</nz-form-label>
+    <nz-form-control requiredtrue [nzSpan]="14">
+      <nz-date-picker
+        [(ngModel)]="profile.birthday"
+        (ngModelChange)="onChange()"
+      >
+      </nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*Starting day</nz-form-label>
+    <nz-form-control requiredtrue [nzSpan]="14">
+      <nz-date-picker
+        [(ngModel)]="profile.startingDay"
+        (ngModelChange)="onChange()"
+      ></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="address">*Avatar</nz-form-label>
+    <input
+      required
+      type="file"
+      multiple="true"
+      nzSpan="18"
+      (change)="handleFileInput($event.target.files)"
+    />
+  </nz-form-item>
+</div>
+<ng-template #profileNull>
+  Profile is null
+</ng-template>

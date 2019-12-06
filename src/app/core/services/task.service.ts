@@ -1,10 +1,10 @@
+import { Task } from './../../shared/models/task';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AlertService } from './alert.service';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Task } from 'src/app/shared/models/task';
 
 
 
@@ -76,5 +76,11 @@ export class TaskService {
     )
   }
 
+  setDeadline(id:number,deadline:Date):Observable<Task>{
+    const url=`${this.taskUrl}/set_deadline/${id}`;
+    return this.http.put<Task>(url,{deadline}).pipe(
+      catchError(this.handleError<Task>('setDeadline'))
+    )
+  }
 
 }

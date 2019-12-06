@@ -6,7 +6,7 @@ export class User {
     firstName: string;
     lastName: string;
     age: number;
-    avatarBase64: string
+    avatarBase64: string;
     birthday: Date;
     sex: boolean;
     address: string;

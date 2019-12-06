@@ -16,7 +16,7 @@
           </div>
   </form>
 </nz-modal>
-<button nz-button nzType="primary" nzGhost (click)="showModal()" >Create</button>
+<button nz-button nzType="primary" nzGhost (click)="showModal()" [disabled]="!isAdmin" >Create</button>
 <br>
 <br>
 
@@ -24,12 +24,12 @@
   <div nz-row [nzGutter]="32">
     <div *ngFor="let project of projects">
       <div nz-col [nzSpan]="8">
-          <!-- (click)="getProject(project?.id)" -->
-        <nz-card [nzExtra]="extraTask" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" [nzTitle]="title" style="border-radius: 7px;padding: 3px;border-color:#B6D2C9;background:rgb(236, 248, 244),;">
+          <!-- (click)="getProject(project?.id)" -->    
+        <nz-card [nzExtra]="extraTask" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" [nzTitle]="title" style="border-radius: 7px;padding: 3px;border-color:cadetblue;background:#f2f7d3;">
             <ng-template #title>
               <div *ngIf="project.status=='APPROVED'; else showError">
                   <a (click)="getProject(project?.id)" [routerLink]="['/project-detal']" >{{project.name}}</a>
-              </div>
+              </div>      
               <ng-template #showError>
                   <a [routerLink]="['/project']" nz-popconfirm
                   nzPopconfirmTitle="The project has not been accepted yet"
@@ -43,14 +43,16 @@
                   <i nz-icon nzType="warning"  nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 40px  ;" ></i>
                 </div>
                 <div style="float: right;display: inline-block;" *ngIf="project.status=='APPROVED'">
-                    <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 40px  ;" ></i>
+                    <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 35px  ;" ></i>
                   </div>
                 <div style="float: right;display: inline-block;" *ngIf="project.status=='REJECTED'">
                     <i nz-icon nzType="close-circle" nzTheme="fill" style="color: rgb(216, 24, 24);font-size: 40px  ;" ></i>
                 </div>
           </div>
           <ng-template #extraTask>
-              <i nz-icon (click)="showModalMember(project?.id)" style="font-size: 32px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
+              <button nz-button nzType="default" (click)="showModalMember(project?.id)" [disabled]="!isAdmin">
+              <i nz-icon  style="font-size: 32px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
+            </button>
             </ng-template>
         </nz-card>
         <br>
@@ -68,7 +70,13 @@
         <br>
         <div *ngFor="let user of userOfProject">
           <div style="display: block;border: 1px solid rgb(76, 189, 241);border-radius: 10px;padding: 5px;">
-            <nz-avatar nzIcon="user" style="background-color:#87d068;display: inline-block;">
+            <nz-avatar nzIcon="user"  style="background-color:#87d068;display: inline-block;">
+              <!-- [nzSrc]="'data:image/jpg;base64,' + user.avatarBase64" -->
+              <!-- <img
+            id="img-profile"
+            src="{{ 'data:image/jpg;base64,' + user.avatarBase64 }}"
+            alt="Image not found"
+            /> -->
             </nz-avatar> 
             <b><p style="margin-left: 10px; margin-top: 5px;display: inline-block;">{{user.email}}</p></b>
             <i nz-icon nzType="close" nzTheme="outline" (click)="removeUser(user.email)" style="font-size: 20px; color: red;float: right;margin-top: 5px;display: inline-block;"></i>

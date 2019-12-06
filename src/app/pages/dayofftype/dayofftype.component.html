@@ -1,4 +1,5 @@
 <button nz-button [nzType]="'primary'" (click)="showModal()"><span>New Type</span></button>
+<br>
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Create Day Off Type" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkDisabled]="!checkData(name)">
   <input nz-input placeholder="content" [(ngModel)]="name" required />
 </nz-modal>

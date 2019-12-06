@@ -1,0 +1,114 @@
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Edit profile"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <app-edit-profile
+    [profile]="profileSendToEditProfile"
+    [fileToUpload]="fileToUpload"
+    (getValidateForm)="getValidateForm($event)"
+  ></app-edit-profile>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="handleOk()"
+      [disabled]="!validateForm"
+      [nzLoading]="isConfirmLoading"
+    >
+      Edit
+    </button>
+  </div>
+</nz-modal>
+<div
+  style="width:100%;"
+  id="profile-information"
+  *ngIf="profile != null; else profileNull"
+>
+  <div class="profile-item-avatar">
+    <h1>{{ gender }}</h1>
+    <img
+      id="img-profile"
+      src="{{ 'data:image/jpg;base64,' + profile.avatarBase64 }}"
+      alt="Image not found"
+    />
+  </div>
+
+  <div class="profile-item">
+    <strong><i nz-icon nzType="user" nzTheme="outline"></i> Full name: </strong>
+    <span>{{ profile.firstName }} {{ profile.lastName }}</span>
+  </div>
+  <div class="profile-item">
+    <strong><i nz-icon nzType="mail" nzTheme="outline"></i> Email: </strong>
+    <span>{{ profile.email }}</span>
+  </div>
+  <div class="profile-item">
+    <strong
+      ><i nz-icon nzType="clock-circle" nzTheme="outline"></i> Age:
+    </strong>
+    <span *ngIf="profile.age; else nonAge">{{ profile.age }}</span>
+    <ng-template #nonAge>
+      <span class="non-found-profile-item">
+        Age not found
+      </span>
+    </ng-template>
+  </div>
+  <div class="profile-item">
+    <strong><i nz-icon nzType="gift" nzTheme="outline"></i> Bitrhday: </strong>
+    <span *ngIf="profile.birthday; else nonBirthday">{{
+      profile.birthday | date: "dd-MM-yyyy"
+    }}</span>
+    <ng-template #nonBirthday>
+      <span  class="non-found-profile-item">
+        Bitrhday not found
+      </span>
+    </ng-template>
+  </div>
+  <div class="profile-item">
+    <strong><i nz-icon nzType="man" nzTheme="outline"></i> Gender: </strong>
+    <span *ngIf="profile.sex; else nonGender">{{ profile.sex }}</span>
+    <ng-template #nonGender>
+      <span  class="non-found-profile-item">
+        Gender not found
+      </span>
+    </ng-template>
+  </div>
+  <div class="profile-item">
+    <strong><i nz-icon nzType="home" nzTheme="outline"></i> Address: </strong>
+    <span *ngIf="profile.address; else nonAddress">{{ profile.address }}</span>
+    <ng-template #nonAddress>
+      <span  class="non-found-profile-item">
+        Address not found
+      </span>
+    </ng-template>
+  </div>
+  <div class="profile-item">
+    <strong
+      ><i nz-icon nzType="poweroff" nzTheme="outline"></i> Starting day:
+    </strong>
+    <span *ngIf="profile.startingDay; else nonStarting">{{
+      profile.startingDay | date: "dd-MM-yyyy"
+    }}</span>
+    <ng-template #nonStarting>
+      <span  class="non-found-profile-item">
+        Starting day not found
+      </span>
+    </ng-template>
+  </div>
+  <div class="" [style.display]="isUserLogin ? 'block' : 'none'">
+    <button
+      id="btn-edit-profile"
+      (click)="showModal()"
+      nz-button
+      nzType="primary"
+      nzBlock
+    >
+      Edit profile
+    </button>
+  </div>
+</div>
+<ng-template #profileNull>
+  <strong>Profile is null</strong>
+</ng-template>

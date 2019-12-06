@@ -1,3 +1,4 @@
+import { AuthService } from './../../../core/services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { User } from 'src/app/shared/models/user';
 import { Component, OnInit } from '@angular/core';
@@ -37,8 +38,11 @@ export class ProjectComponent implements OnInit {
     private alertService: AlertService,
     private router:Router, 
     private userService:UserService  ,
-    private nzMessageService: NzMessageService
+    private nzMessageService: NzMessageService,
+    private authService: AuthService
   ) {}
+
+  isAdmin=this.authService.isAdmin()
 
   ngOnInit() {
     this.getProjectsByUser();
@@ -93,6 +97,7 @@ export class ProjectComponent implements OnInit {
       this.users = users
       for( this.i=0 ;this.i<users.length;this.i++){
         this.suggestions[this.i]=users[this.i].email
+        console.log(users[this.i].avatarBase64)
       }
 
     });

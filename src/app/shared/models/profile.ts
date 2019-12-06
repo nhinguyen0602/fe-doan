@@ -1,3 +1,4 @@
+import { Skill } from "./skill";
 export class Profile {
   id: number;
   firstName: string;
@@ -10,6 +11,7 @@ export class Profile {
   startingDay: string;
   avatarBase64: string;
   fileUpload: File;
+  skills: Skill[];
   enable: boolean;
 
   constructor(obj?: any) {

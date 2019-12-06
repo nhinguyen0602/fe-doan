@@ -28,6 +28,9 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { CountdownTimerModule } from 'ngx-countdown-timer';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
 
 @NgModule({
   declarations: [],
@@ -61,7 +64,10 @@ import { NzListModule } from 'ng-zorro-antd/list';
     NzPopoverModule,
     NzPopconfirmModule,
     NzCommentModule,
-    NzListModule
+    NzListModule,
+    NzCalendarModule,
+    CountdownTimerModule,
+    NzDividerModule
   ]
 })
 export class AppMaterialModule {

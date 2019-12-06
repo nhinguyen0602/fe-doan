@@ -42,6 +42,7 @@ export class DayofftypeComponent implements OnInit {
     this.dayOffTypeService.addDayOffType(this.name)
       .subscribe(dayOffType => {
         this.data = [...this.data, dayOffType]
+        this.name=''
       });
   }
 
@@ -75,7 +76,7 @@ export class DayofftypeComponent implements OnInit {
     this.isVisibleEdit = false;
   }
   checkData(name:string){
-    name=name.trim();
+    // name=name.trim();
     return name!='';
   }
 

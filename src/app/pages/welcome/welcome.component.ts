@@ -28,6 +28,32 @@ export class WelcomeComponent implements OnInit {
     private alertService: AlertService
   ) {
   }
+  listDataMap = {
+    eight: [
+      { type: 'warning', content: 'This is warning event.' },
+      { type: 'success', content: 'This is usual event.' }
+    ],
+    ten: [
+      { type: 'warning', content: 'This is warning event.' },
+      { type: 'success', content: 'This is usual event.' },
+      { type: 'error', content: 'This is error event.' }
+    ],
+    eleven: [
+      { type: 'warning', content: 'This is warning event' },
+      { type: 'success', content: 'This is very long usual event........' },
+      { type: 'error', content: 'This is error event 1.' },
+      { type: 'error', content: 'This is error event 2.' },
+      { type: 'error', content: 'This is error event 3.' },
+      { type: 'error', content: 'This is error event 4.' }
+    ]
+  };
+
+  getMonthData(date: Date): number | null {
+    if (date.getMonth() === 8) {
+      return 1394;
+    }
+    return null;
+  }
 
     get f() {
       return this.requestForm.controls;
@@ -54,6 +80,8 @@ export class WelcomeComponent implements OnInit {
 
     this.getDays();
     this.getAllTypes();
+
+    
 
     this.requestForm = this.formBuilder.group({
       dayEndOff: ['', [Validators.required]],
@@ -106,15 +134,6 @@ export class WelcomeComponent implements OnInit {
       dayEndOff: new DatePipe('en-US').transform(valueForm.dayEndOff, 'yyyy-MM-ddTHH:mm:ss'),
     };
     this.dayOffService.addDayOff(valueForm).subscribe(dayoff=>this.data=[...this.data,dayoff]);
-      // .pipe(first())
-      // .subscribe(
-      //   data => {
-      //     this.alertService.success('successful');
-      //   },
-      //   error => {
-      //     this.alertService.error('error');
-      //   }
-      // );
     this.isVisible = false;
   }
 

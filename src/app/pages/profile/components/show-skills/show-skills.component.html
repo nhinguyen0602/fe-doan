@@ -1,0 +1,28 @@
+<div class="title-skills" nz-row>
+  <h1 nz-col nzSpan="21"><strong>Skills</strong></h1>
+  <button
+    id="btn-show-edit-skill"
+    routerLink="edit"
+    nz-tooltip
+    nzTooltipTitle="Edit skills"
+    nz-col
+    nzSpan="3"
+    nz-button
+    nzType="primary"
+    [style.display]="isUserLogin ? 'block' : 'none'"
+  >
+    +
+  </button>
+</div>
+<nz-card class="title-skills" nz-row style="margin-top: 20px;">
+  <div *ngIf="!isEmptySkills; else EmptySkill">
+    <nz-tag *ngFor="let skill of skills" [nzColor]="'#001429'">
+      <strong>{{ skill.name }}</strong>
+    </nz-tag>
+  </div>
+  <ng-template #EmptySkill style="text-align: center;">
+    <h4 id="empty-skills">
+      Empty Skills
+    </h4>
+  </ng-template>
+</nz-card>

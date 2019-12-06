@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Task } from './../../shared/models/task';
 import { Comment } from './../../shared/models/comment';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -14,6 +15,7 @@ import { Router } from '@angular/router';
 import { TaskService } from 'src/app/core/services/task.service';
 import { Job } from 'src/app/shared/models/job';
 import { distanceInWords } from 'date-fns';
+
 
 @Component({
   selector: 'app-project-detail',
@@ -295,5 +297,26 @@ export class ProjectDetailComponent implements OnInit {
  displayTime(date:Date){
    return distanceInWords(new Date(),date);
  }
+
+ date:any
+
+ onChange(result: Date): void {
+  console.log('Selected Time: ', result);
+}
+
+revertDate(date:Date){
+  return new DatePipe('en-US').transform(date, 'yyyy-MM-ddTHH:mm:ss');
+}
+
+onOk(result: Date): void {
+  this.date=new DatePipe('en-US').transform(result, 'yyyy-MM-ddTHH:mm:ss')
+  console.log('onOk', result);
+  var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
+  this.taskService.setDeadline(idTask,this.date).subscribe(data=>{
+    this.task=data
+    console.log(this.data)  
+  })
+}
+
 }
 //token pay load

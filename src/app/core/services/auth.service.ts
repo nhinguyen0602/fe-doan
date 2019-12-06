@@ -9,6 +9,7 @@ import { NzAffixComponent, responsiveMap } from 'ng-zorro-antd';
 import { Profile } from 'src/app/shared/models/profile';
 import { environment } from 'src/environments/environment';
 import {JwtHelperService} from '@auth0/angular-jwt';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    public jwtHelper: JwtHelperService
+    public jwtHelper: JwtHelperService,
+    private tokenService : TokenService
   ) {  }
 
   private handleError(error: HttpErrorResponse) {
@@ -87,5 +89,17 @@ export class AuthService {
   public isAuthenticated(): boolean {
     const token = localStorage.getItem('currentUser');
     return !this.jwtHelper.isTokenExpired(token);
+  }
+
+  public isAdmin() : boolean {
+    if (
+      this.getAuthentication() !== null &&
+      this.tokenService
+        .parseJwt(this.getAuthentication())
+        .scopes.includes("ROLE_ADMIN")
+    ) {
+      return true;
+    }
+    return false;
   }
 }
