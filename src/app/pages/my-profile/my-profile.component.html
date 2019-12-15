@@ -1,0 +1,11 @@
+<div style="display: flex;border: 1px solid; border-color: white;border-radius: 3px;padding: 1px ;width: 130px;height: 60px;margin-top: 5px;margin-top: 5px;background: rgb(236, 253, 242);">
+<nz-avatar  [nzSize]="50" [nzSrc]="'data:image/jpg;base64,'+profile?.avatarBase64" nz-dropdown [nzDropdownMenu]="menu2" nzPlacement="bottomLeft" style="display: inline-block;margin-top: 5px;"></nz-avatar>
+<h2 class="text-success" style="display: inline-block;margin-top: 10px;margin-left: 10px;">{{profile?.firstName}}</h2>
+</div>
+  <nz-dropdown-menu #menu2="nzDropdownMenu">
+    <ul nz-menu>
+        <li nz-menu-item (click)="profilee()"><i nz-icon nzType="profile" nzTheme="outline"></i>Profile</li>
+        <li nz-menu-item (click)="logout()"><i nz-icon nzType="logout"></i> Logout</li>
+    </ul>
+  </nz-dropdown-menu>
+<!-- <p>{{profile?.email}}</p> -->

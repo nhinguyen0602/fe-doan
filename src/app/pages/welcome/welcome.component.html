@@ -1,112 +1,138 @@
 <h1 style="color: #40a9ff">
-    REQUEST TIME OFF
-  </h1>
-  <div fxLayout="row" fxLayoutAlign="space-between center">
-    <!-- <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 50%; float: right">
-      <nz-select nzPlaceHolder="Select Year" nzAllowClear [(ngModel)]="year" (ngModelChange)="getByYear(year)">
-        <nz-option nzValue="2019" nzLabel="2019"></nz-option>
-        <nz-option nzValue="2018" nzLabel="2018"></nz-option>
-        <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
-          <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
-        </nz-option>
-      </nz-select>
-    </nz-input-group> -->
-    <nz-modal [(nzVisible)]="isVisible" nzTitle="Request Day Off" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
-      <form nz-form [nzLayout]="'inline'" [formGroup]="requestForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <nz-form-item>
-            <label style="padding-right: 20px;"><br/>Day Start: </label>
-            <span></span>
-            <nz-date-picker formControlName="dayStartOff"
-                            nzShowTime
-                            nzFormat="dd-MM-yyyy-HH:mm"
-                            nzPlaceHolder="Select Time"
-                            ngModel
-                            (ngModelChange)="onChange($event)"
-                            (nzOnOk)="onOk($event)"
-            ></nz-date-picker>
-            <br/>
-          </nz-form-item>
-        </div>
-        <br/>
-        <div class="form-group">
-          <nz-form-item>
-            <label style="padding-right: 22px;"><br/>Day End: </label>
-            <nz-date-picker formControlName="dayEndOff"
-                            nzShowTime
-                            nzFormat="dd-MM-yyyy HH:mm:ss"
-                            nzPlaceHolder="Select Time"
-                            ngModel
-                            (ngModelChange)="onChange($event)"
-                            (nzOnOk)="onOk($event)"
-            ></nz-date-picker>
-            <br/>
-          </nz-form-item>
-        </div>
-        <br/>
-        <div class="form-group">
-          <label style="padding-right: 22px;">Type : </label>
-          <nz-form-item style="margin-left: 20px;font-size: 15px;" class="width-80">
-            <nz-select formControlName="dayOffType" style="font-size: 15px;" (nzScrollToBottom)="getAllTypes()"
-                       nzPlaceHolder="Select Type Of Day Off" nzAllowClear>
-              <nz-option *ngFor="let type of types" style="font-size: 15px;" [nzValue]="type" [nzLabel]="type.name"></nz-option>
-              <nz-option *ngIf="isLoading" style="font-size: 15px;" nzSize='small' nzDisabled nzCustomContent>
-                <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
-              </nz-option>
-            </nz-select>
-          </nz-form-item>
-        </div>
-        <br/>
-        <div class="form-group">
-          <label style="padding-right: 10px;">Comments: </label>
-          <nz-form-item class="width-60">
-  
-            <input nz-input style="font-size: 15px;" formControlName="description"/>
-          </nz-form-item>
-        </div>
-      </form>
-    </nz-modal>
-    <div style="display: block;">
-        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton" style="width: 50%; float: left;display: inline-block">
-            <nz-select nzPlaceHolder="Select Year" nzAllowClear [(ngModel)]="year" (ngModelChange)="getByYear(year)">
-              <nz-option nzValue="2019" nzLabel="2019"></nz-option>
-              <nz-option nzValue="2018" nzLabel="2018"></nz-option>
-              <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
-                <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-          <button nz-button nzType="dashed" nzShape="circle"  style="display: inline-block;margin-left: ;float: right;margin-right: 10px;" (click)="showModal()"><i nz-icon nzType="plus" nzTheme="outline"></i>
-          </button>
-    </div>
-    <br>
-    
-  </div>
-  <br/>
-  <nz-table #editRowTable nzBordered [nzData]="data">
-    <div class="types"></div>
-    <thead>
+  REQUEST TIME OFF
+</h1>
+<div fxLayout="row" fxLayoutAlign="space-between center">
+  <nz-input-group
+    nzSearch
+    [nzAddOnAfter]="suffixIconButton"
+    style="width: 50%; float: right"
+  >
+    <nz-select
+      nzPlaceHolder="Select Year"
+      nzAllowClear
+      [(ngModel)]="year"
+      (ngModelChange)="getByYear(year)"
+      style="float: right;"
+    >
+      <nz-option nzValue="2019" nzLabel="2019"></nz-option>
+      <nz-option nzValue="2018" nzLabel="2018"></nz-option>
+      <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+        <i nz-icon nzType="loading" class="loading-icon"></i> Loading Data...
+      </nz-option>
+    </nz-select>
+  </nz-input-group>
+  <nz-modal
+    [(nzVisible)]="isVisible"
+    nzTitle="Request Day Off"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="onSubmit()"
+  >
+    <form nz-form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="email">Day Start</nz-form-label>
+        <nz-form-control
+          [nzSpan]="18"
+          nzErrorTip="Please input day off's start!"
+        >
+          <nz-date-picker
+            formControlName="dayStartOff"
+            nzShowTime
+            nzFormat="dd-MM-yyyy-HH:mm"
+            nzPlaceHolder="Select Time"
+            ngModel
+            (ngModelChange)="onChange($event)"
+            (nzOnOk)="onOk($event)"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="day-end">Day End</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Please input day off's end!">
+          <nz-date-picker
+            formControlName="dayEndOff"
+            nzShowTime
+            nzFormat="dd-MM-yyyy HH:mm:ss"
+            nzPlaceHolder="Select Time"
+            ngModel
+            (ngModelChange)="onChange($event)"
+            (nzOnOk)="onOk($event)"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="type">Type</nz-form-label>
+        <nz-form-control
+          [nzSpan]="15"
+          nzErrorTip="Please input day off's type!"
+        >
+          <nz-select
+            formControlName="dayOffType"
+            (nzScrollToBottom)="getAllTypes()"
+            nzPlaceHolder="Select Type Of Day Off"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let type of types"
+              [nzValue]="type"
+              [nzLabel]="type.name"
+            ></nz-option>
+            <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+              <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+              Data...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="comments">Comments</nz-form-label>
+        <nz-form-control
+          [nzSpan]="15"
+          nzErrorTip="Please input day off's comment!"
+        >
+          <textarea
+            rows="4"
+            style="width: 100%;"
+            nz-input
+            formControlName="description"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </nz-modal>
+  <button nz-button nzType="dashed" nzShape="circle" style="float:left;" (click)="showModal()">
+    <i nz-icon nzType="plus" nzTheme="outline"></i>
+  </button>
+</div>
+<br />
+<br>
+<nz-table #editRowTable nzBordered [nzData]="data">
+  <div class="types"></div>
+  <thead>
     <tr>
       <th nzWidth="20%">Create At</th>
       <th nzWidth="20%">Start Day</th>
       <th nzWidth="20%">End Day</th>
       <th nzWidth="40%">Description</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr *ngFor="let data of editRowTable.data">
       <td>
-        <ng-container>{{ data.createAt | date : 'short'}}</ng-container>
+        <ng-container>{{ data.createAt | date: "short" }}</ng-container>
       </td>
       <td>
-        <ng-container>{{ data.dayStartOff | date : 'dd/MM/yyyy HH:mm':'+0000'}}</ng-container>
+        <ng-container>{{
+          data.dayStartOff | date: "dd/MM/yyyy HH:mm":"+0000"
+        }}</ng-container>
       </td>
       <td>
-        <ng-container>{{ data.dayEndOff | date : 'dd/MM/yyyy HH:mm':'+0000'}}</ng-container>
+        <ng-container>{{
+          data.dayEndOff | date: "dd/MM/yyyy HH:mm":"+0000"
+        }}</ng-container>
       </td>
       <td>
         <ng-container>{{ data.description }}</ng-container>
       </td>
     </tr>
-    </tbody>
-  </nz-table>
+  </tbody>
+</nz-table>

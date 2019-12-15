@@ -83,4 +83,20 @@ export class TaskService {
     )
   }
 
+  addUserForTask(email:string,id:number){
+    const url = `${this.taskUrl}/add_user/${id}?email=${email}`;
+    console.log(url);
+    return this.http.put(url,this.httpOptions).pipe(
+      catchError(this.handleError<string>('addUserForTask'))
+    )
+  }
+
+  removeUserForTask(email:string,id:number){
+    const url = `${this.taskUrl}/remove_user/${id}?email=${email}`;
+    console.log(url);
+    return this.http.put(url,this.httpOptions).pipe(
+      catchError(this.handleError<string>('removeUserFortask'))
+    )
+  }
+
 }

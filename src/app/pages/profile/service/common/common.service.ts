@@ -11,7 +11,8 @@ export class CommonService implements OnInit {
     this.getIdProfileInParams();
   }
 
-  getIdProfileInParams(): number {
+  getIdProfileInParams(): number { 
+    // localStorage.setItem("idUser",+this.route.snapshot.firstChild.params.id+'');
     return +this.route.snapshot.firstChild.params.id;
   }
 }

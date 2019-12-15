@@ -1,3 +1,4 @@
+import { Role } from './role';
 export class User {
     id: number;
     idUser: number;
@@ -6,7 +7,7 @@ export class User {
     firstName: string;
     lastName: string;
     age: number;
-    avatarBase64: string;
+    avatar: string;
     birthday: Date;
     sex: boolean;
     address: string;
@@ -14,4 +15,5 @@ export class User {
     status: boolean;
     token: string;
     enable: boolean
+    role:string
 }

@@ -1,3 +1,5 @@
+import { catchError } from 'rxjs/operators';
+import { Login } from './../../shared/models/login';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User } from 'src/app/shared/models/user';
@@ -82,7 +84,6 @@ export class AuthService {
         Authorization: 'Bearer ' + this.getAuthentication()
       })
     };
-
     return this.http.get<Profile>(`${environment.apiUrl}/profiles`, httpOptions);
   }
 
@@ -102,4 +103,6 @@ export class AuthService {
     }
     return false;
   }
+
+
 }

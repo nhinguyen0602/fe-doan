@@ -1,58 +1,80 @@
-<nz-modal [(nzVisible)]="isVisible" nzTitle="New Project" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
+<nz-modal [(nzVisible)]="isVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()" [nzClosable]="false">
+  <ng-template #modalTitle>
+    <h4 class="text-success">CREATE PROJECT</h4>
+  </ng-template>
   <form nz-form [nzLayout]="'inline'" [formGroup]="requestForm" (ngSubmit)="onSubmit()">
       <div style="display: block;" class="form=form-group">
           <nz-form-item style="display: block;">
-            <label style="padding-right: 22px;display: inline-block;"><br />name<span style="color: red;">(*)</span> </label>
+            <label class="text-success" style="padding-right: 22px;display: inline-block;"><br />name<span style="color: red;">(*)</span> </label>
             <span><input nz-input style=" margin-left: 45px; width: 300px; margin-top: 0px;display: inline-block;"
                 formControlName="name" /></span>
           </nz-form-item>
         </div>
         <div style="display: block;" class="form=form-group">
             <nz-form-item style="display: block;">
-              <label style="padding-right: 22px;display: inline-block;"><br />description<span style="color: red;">(*)</span> </label>
+              <label class="text-success" style="padding-right: 22px;display: inline-block;"><br />description<span style="color: red;">(*)</span> </label>
               <span><input nz-input style=" margin-left: 15px; width: 300px; margin-top: 0px;display: inline-block;"
                   formControlName="description" /></span>
             </nz-form-item>
           </div>
   </form>
 </nz-modal>
-<button nz-button nzType="primary" nzGhost (click)="showModal()" [disabled]="!isAdmin" >Create</button>
+<button type="button" class="btn btn-info" nzGhost (click)="showModal()" [disabled]="!isAdmin" >Create</button>
 <br>
 <br>
+
 
 <div >
   <div nz-row [nzGutter]="32">
     <div *ngFor="let project of projects">
       <div nz-col [nzSpan]="8">
           <!-- (click)="getProject(project?.id)" -->    
-        <nz-card [nzExtra]="extraTask" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" [nzTitle]="title" style="border-radius: 7px;padding: 3px;border-color:cadetblue;background:#f2f7d3;">
+        <nz-card [nzExtra]="extraTask" [nzHoverable]="true" [nzBordered]="true" [nzHoverable]="true" [nzTitle]="title" style="border-radius: 7px;padding: 3px;border-color:cadetblue;background: rgb(237, 243, 219);">
             <ng-template #title>
               <div *ngIf="project.status=='APPROVED'; else showError">
-                  <a (click)="getProject(project?.id)" [routerLink]="['/project-detal']" >{{project.name}}</a>
+                  <a style="font-size: 20px;" (click)="getProject(project?.id)" [routerLink]="['/project-detal']" >{{project.name}}</a>
               </div>      
               <ng-template #showError>
                   <a [routerLink]="['/project']" nz-popconfirm
                   nzPopconfirmTitle="The project has not been accepted yet"
                   nzPopconfirmPlacement="top"
+                  style="font-size: 20px;"
                  >{{project.name}}</a>
-              </ng-template>`
+              </ng-template>
               </ng-template>
           <div style="display: block;">
-              <p style="display: inline-block;">{{project?.description}}</p>
+              <ng-container *ngIf="currentProject!=project.id;else inputEdit" >
+                <p class="text-primary">{{project?.description}}</p>
+              </ng-container>
+              <ng-template style="display: block;" #inputEdit>
+                <input type="text" class="form-control" style="width: 200px;display:inline-block" [(ngModel)]="project.description"/>
+                <i nz-icon nzType="save" nzTheme="outline" style='font-size:35px;color: rgb(16, 203, 216); margin-left: 7px;' (click)="saveProject(project.id,project)"></i>
+                <!-- <i class='far fa-save' style='font-size:24px' (click)="saveProject(project.id,project)"></i> -->
+                <!-- <button style="display: inline-block;margin-left: 5px;" class="glyphicon glyphicon-save" (click)="saveProject(project.id,project)">Save</button> -->
+              </ng-template>
+
               <div style="float: right;display: inline-block;" *ngIf="project.status=='PENDING'">
-                  <i nz-icon nzType="warning"  nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 40px  ;" ></i>
+                  <i nz-icon nzType="warning"  nzTheme="fill" style="color: rgb(235, 235, 81);font-size: 35px  ;" ></i>
                 </div>
                 <div style="float: right;display: inline-block;" *ngIf="project.status=='APPROVED'">
                     <i nz-icon nzType="check-circle" nzTheme="fill" style="color: green;font-size: 35px  ;" ></i>
                   </div>
                 <div style="float: right;display: inline-block;" *ngIf="project.status=='REJECTED'">
-                    <i nz-icon nzType="close-circle" nzTheme="fill" style="color: rgb(216, 24, 24);font-size: 40px  ;" ></i>
+                    <i nz-icon nzType="close-circle" nzTheme="fill" style="color: rgb(216, 24, 24);font-size: 35px  ;" ></i>
                 </div>
           </div>
           <ng-template #extraTask>
-              <button nz-button nzType="default" (click)="showModalMember(project?.id)" [disabled]="!isAdmin">
-              <i nz-icon  style="font-size: 32px; color: #08c;" nzType="usergroup-add" nzTheme="outline"></i>
+            <nz-button-group>
+              <button type="button" nz-dropdown [nzDropdownMenu]="menu2" nzPlacement="bottomLeft" class="btn"  [disabled]="!isAdmin">
+              <i nz-icon  style="font-size: 27px; color: #08c;" nzType="setting" nzTheme="outline"></i>
             </button>
+          </nz-button-group>
+          <nz-dropdown-menu #menu2="nzDropdownMenu">
+            <ul nz-menu>
+                <li nz-menu-item  (click)="editProject(project?.id)"> <i nz-icon nzType="edit" nzTheme="outline"></i>Edit</li>
+                <li nz-menu-item  (click)="showModalMember(project?.id)"><i nz-icon nzType="user-add" nzTheme="outline"></i>Add member</li>
+            </ul>
+          </nz-dropdown-menu>
             </ng-template>
         </nz-card>
         <br>
@@ -63,20 +85,18 @@
 </div>
 
 
-<nz-modal [(nzVisible)]="isVisibleMember" nzTitle="Add Member" (nzOnCancel)="memberCancel()" (nzOnOk)="memberSubmit()">
-    <nz-mention nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect($event)" >
+<nz-modal [(nzVisible)]="isVisibleMember" [nzTitle]="member" (nzOnCancel)="memberCancel()" (nzOnOk)="memberSubmit()" [nzClosable]="false">
+  <ng-template #member >
+    <h4 class="text-success"> ADD MEMBER</h4>
+  </ng-template>  
+  <nz-mention nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect($event)" >
         <input id="textzz" nzMentionTrigger nz-input [(ngModel)]="inputValue" (ngModelChange)="onChange($event)" />
         <br>
         <br>
         <div *ngFor="let user of userOfProject">
           <div style="display: block;border: 1px solid rgb(76, 189, 241);border-radius: 10px;padding: 5px;">
-            <nz-avatar nzIcon="user"  style="background-color:#87d068;display: inline-block;">
-              <!-- [nzSrc]="'data:image/jpg;base64,' + user.avatarBase64" -->
-              <!-- <img
-            id="img-profile"
-            src="{{ 'data:image/jpg;base64,' + user.avatarBase64 }}"
-            alt="Image not found"
-            /> -->
+            <nz-avatar style="display: inline-block;"
+            nzSrc="{{'data:image/jpg;base64,'+user.avatar}}">
             </nz-avatar> 
             <b><p style="margin-left: 10px; margin-top: 5px;display: inline-block;">{{user.email}}</p></b>
             <i nz-icon nzType="close" nzTheme="outline" (click)="removeUser(user.email)" style="font-size: 20px; color: red;float: right;margin-top: 5px;display: inline-block;"></i>

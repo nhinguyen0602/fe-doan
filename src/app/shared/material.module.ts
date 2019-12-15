@@ -31,6 +31,10 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+// import { NzFormModule } from 'ng-zorro-antd/form';
 
 @NgModule({
   declarations: [],
@@ -67,7 +71,11 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
     NzListModule,
     NzCalendarModule,
     CountdownTimerModule,
-    NzDividerModule
+    NzDividerModule,
+    LoadingBarRouterModule,
+    LoadingBarModule,
+    NzSkeletonModule,
+    NzInputModule
   ]
 })
 export class AppMaterialModule {

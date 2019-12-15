@@ -1,3 +1,5 @@
+import { User } from './../../shared/models/user';
+import { AuthService } from './../../core/services/auth.service';
 import { DatePipe } from '@angular/common';
 import { Task } from './../../shared/models/task';
 import { Comment } from './../../shared/models/comment';
@@ -33,7 +35,9 @@ export class ProjectDetailComponent implements OnInit {
     private router: Router,
     private taskService: TaskService,
     private jobService:JobService,
-    private commentService:CommentService
+    private commentService:CommentService,
+    private authService: AuthService,
+    private nzMessageService:NzMessageService
   ) { }
 
   get f() {
@@ -50,6 +54,8 @@ export class ProjectDetailComponent implements OnInit {
   cards: any[];
   tasks: Task[] = [];
   data: Task;
+  isAdmin=this.authService.isAdmin();
+  isLoadingResult=true  
 
   ngOnInit() {
     this.getProjectById();
@@ -64,7 +70,8 @@ export class ProjectDetailComponent implements OnInit {
     this.requestFormJob = this.formBuilder.group({
       content: ['', [Validators.required]]
     });
-    
+    // this.getUserOfTask();      
+    // this.getUserOfproject();      
   }
 
   getProjectById() {
@@ -81,16 +88,13 @@ export class ProjectDetailComponent implements OnInit {
       if (this.cards[0]) {
         this.getTasksByCard(this.cards[0].id);
       }
+      this.isLoadingResult=false;
     });
-
+    
   }
 
   isManage: boolean;
 
-  // checkRole(){
-  //   this.userService.isManage(0).subscribe(data=>this.isManage=data);
-  //   return this.isManage;
-  // }
   isVisible = false;
 
   showModal(): void {
@@ -116,9 +120,11 @@ export class ProjectDetailComponent implements OnInit {
 
 
   getTasksByCard(id: number) {
+    this.isLoadingResult=true;
     localStorage.setItem("idCardCurrent", id + "");
     this.tasks = [];
     this.taskService.getTaskByCard(id).subscribe(data => {
+      console.log(this.isLoadingResult)
       this.tasks = data
       this.tasks.forEach((eachTask, index) => {
         this.jobService.getProcess(eachTask.id).subscribe(process => {
@@ -128,8 +134,10 @@ export class ProjectDetailComponent implements OnInit {
           }
         })
       })
+      // this.isLoadingResult=false;
     });
-
+    this.isLoadingResult=false;
+    console.log(this.isLoadingResult)
   }
 
   confirmDeleteTask(id:number){
@@ -140,7 +148,6 @@ export class ProjectDetailComponent implements OnInit {
   task:Task
   
   editTask(id:number){
-    // this.taskService.editTask(id,task).subscribe(data=>this.task=data)
     this.currentTask=id;
   }
 
@@ -206,11 +213,17 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   showModalJob(id: number): void {
+    // this.isLoadingResult=true
     this.isVisibleJob = true;
     localStorage.setItem("idTaskCurrent", id + "");
-    this.taskService.getTask(id).subscribe(task=>this.data=task)
+    this.taskService.getTask(id).subscribe(task=>{
+      this.data=task
+      this.date=this.data.deadline
+    })
     this.jobService.getJobByTask(id).subscribe(jobs=>this.jobs=jobs)
     this.getCommentByTask(id);
+    this.getUserOfTask();
+    this.getUserOfproject();
   }
 
   handleCancelJob() {
@@ -223,7 +236,10 @@ export class ProjectDetailComponent implements OnInit {
     }
     let valueForm = this.requestFormJob.value
     var id = parseInt(localStorage.getItem("idTaskCurrent"));
-    this.jobService.addJob(id,valueForm).subscribe(data => this.jobs = [...this.jobs, data]);
+    this.jobService.addJob(id,valueForm).subscribe(data =>{ 
+      this.jobs = [...this.jobs, data]
+      this.jobService.getProcess(id);
+    });
     this.requestFormJob.reset();
   }
 
@@ -241,13 +257,11 @@ export class ProjectDetailComponent implements OnInit {
 
   public getProcess(id:number){
     var data = this.jobService.getProcess(id).toPromise();
-    console.log(data);
     return data;
   }     
 
   logJob(id: number): void {
     var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
-    console.log("hihi"+id);
     this.jobService.changeJob(id).subscribe(data=>{
       let indexTask=this.tasks.findIndex(e=> e.id==idTask);
       this.jobService.getProcess(idTask).subscribe(value=>this.tasks[indexTask] = {
@@ -262,17 +276,14 @@ export class ProjectDetailComponent implements OnInit {
   submitting = false;
   inputValue = '';
   currentComment:number=0;
-  
 
   editComment(id:number){
      this.currentComment=id;
-     console.log(this.currentComment)
   }
 
   saveComment(id:number,content:string){
     this.commentService.updateComment(id,content).subscribe(data=>this.comment=data)
     this.currentComment=0;
-    console.log(this.currentComment);
     
   }
 
@@ -301,7 +312,6 @@ export class ProjectDetailComponent implements OnInit {
  date:any
 
  onChange(result: Date): void {
-  console.log('Selected Time: ', result);
 }
 
 revertDate(date:Date){
@@ -310,12 +320,42 @@ revertDate(date:Date){
 
 onOk(result: Date): void {
   this.date=new DatePipe('en-US').transform(result, 'yyyy-MM-ddTHH:mm:ss')
-  console.log('onOk', result);
   var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
   this.taskService.setDeadline(idTask,this.date).subscribe(data=>{
     this.task=data
-    console.log(this.data)  
+    var id = parseInt(localStorage.getItem("idCardCurrent"));
+    this.getTasksByCard(id);
   })
+}
+
+userOfTask:User[]=[]
+
+getUserOfTask(){
+  var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
+  this.userService.getUserByTask(idTask).subscribe(data=>this.userOfTask=data);
+}
+
+userOfProject:User[]=[]
+getUserOfproject(){
+  var id = parseInt(localStorage.getItem("project"));
+  this.userService.getUserByProject(id).subscribe(data=>{this.userOfProject=data
+  // console.log(this.u)
+  });
+}
+
+setUserOfTask(email:string){
+  var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
+  this.taskService.addUserForTask(email,idTask).subscribe(data=>{
+    this.getUserOfTask();
+  })
+}
+
+confirmRemoveUser(email:string){
+  var idTask = parseInt(localStorage.getItem("idTaskCurrent"));
+  this.taskService.removeUserForTask(email,idTask).subscribe(data=>{
+    this.getUserOfTask();
+  })
+  this.nzMessageService.info('click confirm');
 }
 
 }

@@ -8,7 +8,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import {NzTimePickerModule} from 'ng-zorro-antd';
 
 
-
 @NgModule({
   imports: [CommonModule, SharedModule, WelcomeRoutingModule, NzTimePickerModule],
   declarations: [ WelcomeComponent],

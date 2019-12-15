@@ -1,21 +1,29 @@
-<body>
-  <div class="limiter">
-    <div class="container-login">
-      <div class="wrap-login">
-        <div class="login-form-title" style="background-image: url('assets/images/bg-01.jpg');">
-          <span class="login-form-title-1">
-            Sign In
-          </span>
-        </div>
-
-        <form class="login-form validate-form">
-          <div class="flex-sb-m w-full p-b-30">
-            <a id="google-button" class="btn btn-block btn-social btn-google" style="cursor: pointer;">
-              <i class="fa fa-google"></i> Sign in with Google
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
+<div style="display: flex;justify-content: center;">
+<form style="border: 1px solid; border-color: blue;border-radius: 7px;padding: 50px ; width: 700  px;margin-top: 100px;margin-bottom: 100px;background: ghostwhite;" nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="user">
+            <input type="text" nz-input formControlName="email" placeholder="Username" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock">
+            <input type="password" nz-input formControlName="password" placeholder="Password" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control style="display: block;">
+          <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
+          <!-- <a id="google-button" class="btn btn-block btn-social btn-google" style="cursor: pointer;margin-bottom:10px;display: inline-block;">
+            <i class="fa fa-google" style="color: red;"></i> Sign in with Google
+          </a> -->
+          <button nz-button id="google-button" class="login-form-button" [nzType]="'danger'">
+            <i class="fa fa-google" style="color: white"></i> Sign in with Google
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
   </div>
-</body>

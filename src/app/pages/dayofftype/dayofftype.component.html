@@ -3,7 +3,8 @@
 <nz-modal [(nzVisible)]="isVisible" nzTitle="Create Day Off Type" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()" [nzOkDisabled]="!checkData(name)">
   <input nz-input placeholder="content" [(ngModel)]="name" required />
 </nz-modal>
-<nz-table #nzTable [nzData]="data">
+<br>  
+<nz-table #nzTable [nzData]="data" style="background: rgb(237, 243, 219);">
   <thead>
     <tr>
       <th nzCustomFilter>ID</th>

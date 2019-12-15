@@ -30,6 +30,16 @@ const routes: Routes = [
     loadChildren: () =>
       import("./pages/skill/skill.module").then(m => m.SkillModule)
   },
+  {
+    path: "my-profile",
+    loadChildren: () =>
+      import("./pages/my-profile/my-profile.module").then(m => m.MyProfileModule)
+  },
+  {
+    path: "users",
+    loadChildren: () =>
+      import("./pages/users/users.module").then(m => m.UsersModule)
+  }
 ];
 
 @NgModule({

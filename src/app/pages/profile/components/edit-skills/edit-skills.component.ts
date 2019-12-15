@@ -128,6 +128,7 @@ export class EditSkillsComponent implements OnInit {
       nzContent: "Waiting................"
     });
     setTimeout(() => modal.destroy(), 2000);
+    console.log(this.idUrl);  
     this.showProfileService.getProfileFollowId(this.idUrl).subscribe(
       data => {
         data.skills = this.skills;

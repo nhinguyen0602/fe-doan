@@ -16,6 +16,7 @@ import { registerLocaleData } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import en from '@angular/common/locales/en';
 import { JwtModule } from '@auth0/angular-jwt';
+import { MyProfileComponent } from './pages/my-profile/my-profile.component';
 
 registerLocaleData(en);
 
@@ -27,13 +28,14 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     AlertComponent,
-    NavbarComponent
+    NavbarComponent,
+    MyProfileComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     NzFormModule,
-    NgZorroAntdModule.forRoot(),
+    NgZorroAntdModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,

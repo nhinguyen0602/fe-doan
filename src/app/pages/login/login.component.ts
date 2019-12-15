@@ -1,3 +1,7 @@
+import { UserService } from 'src/app/core/services/user.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd';
+import { ShowProfileService } from './../profile/service/show-profile/show-profile.service';
 import { Component, OnInit, NgZone, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -22,6 +26,7 @@ export class LoginComponent implements OnInit {
   clientId: string = '10558520426-5epndmc1a1dgsjvffftbvn60rr6521hh.apps.googleusercontent.com';
   loginError: string;
   error: {};
+  validateForm: FormGroup;
 
   private scope = [
     'profile',
@@ -37,19 +42,48 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private ngZone: NgZone,
     private element: ElementRef,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private showProfileService: ShowProfileService,
+    public message: NzMessageService,
+    private fb: FormBuilder,
+    private userService:UserService
   ) {
 
-    console.log('ElementRef: ', this.element);
+    // console.log('ElementRef: ', this.element);
 
-    //redirect to home if logged
-    if (this.authService.currentUser) {
-      this.router.navigate[('/project')];
-    }
+    // //redirect to home if logged
+    // if (this.authService.currentUser) {
+    //   this.router.navigate[('/project')];
+    // }
   }
 
   ngOnInit() {
     this.googleInit();
+    this.validateForm = this.fb.group({
+      email: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+      remember: [true]
+    });
+  }
+
+  get email() { return this.validateForm.get('email'); }
+  get password() { return this.validateForm.get('password'); }
+
+  submitForm(): void {
+    if (this.validateForm.invalid) {
+      return;
+    }
+    let valueForm = this.validateForm.value
+    this.userService.login(this.email.value,this.password.value).subscribe(data => {
+      this.ngZone.run(() => this.router.navigate(['/project'])).then();
+       var token = data.accessToken;
+      localStorage.setItem('currentUser', token);
+    },
+    error => {
+      this.message.error('Login failed');
+    }
+    );
+    this.validateForm.reset();
   }
 
   public auth2: any;
@@ -73,15 +107,24 @@ export class LoginComponent implements OnInit {
         console.log('ID: ' + profile.getId());
         console.log('Name: ' + profile.getName());
         console.log('Email: ' + profile.getEmail());
+        
         this.authService.loginGoogle(googleUser.getAuthResponse().id_token)
-        .subscribe((data)=>{
-          this.ngZone.run(() =>  this.router.navigate(['/project'])).then();
+        .subscribe(data => {
+          this.ngZone.run(() => this.router.navigate(['/project'])).then();
           let token = data.accessToken;
-          localStorage.setItem('currentUser',token);
+          localStorage.setItem('currentUser', token);
+        },
+        error => {
+          if (error.status === 406) {
+            this.message.error('Email is not Novahub email');
+          } else {
+            this.message.error(`${error.error}`);
           }
+        }
         );
-
+      
       });
+      
   }
 
   ngAfterViewInit() {

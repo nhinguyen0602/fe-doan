@@ -1,5 +1,6 @@
+<!-- <mat-progress-bar mode="determinate" [value]="77"></mat-progress-bar> -->
 <nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar" *ngIf="isLogged()" nzCollapsible nzWidth="256px" nzBreakpoint="md"
+  <nz-sider nzWidth="200px" *ngIf="isLogged()" nzCollapsible  nzBreakpoint="md"
     [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
     <div class="sidebar-logo">
       <a href="https://ng.ant.design/" target="_blank">
@@ -37,52 +38,30 @@
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/skills">Skill</a>
           </li>
-        </ul>
-      </li>
-
-      <!-- <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
-        <ul>
-            <li nz-menu-item nzMatchRouter>
-                <a routerLink="/dayoff">Day Off manage</a>
-            </li>
-        </ul>
-        <ul>
-            <li nz-menu-item nzMatchRouter>
-                <a routerLink="/project-admin">Project manage</a>
-            </li>
-        </ul>
-        <ul>
-            <li nz-menu-item nzMatchRouter>
-                <a routerLink="/dayofftype">Day Off Type</a>
-              </li>
-        </ul>
-      </li> -->
-      <li nz-submenu nzOpen nzTitle="Your" nzIcon="user">
-        <ul>
           <li nz-menu-item nzMatchRouter>
-            <a (click)="profile()">Profile</a>
+            <a routerLink="/users">Users</a>
           </li>
-        </ul>
-        <ul>
-          <li nz-menu-item nzMatchRouter (click)="logout()">
-            <a>Logout</a>
-          </li>
+            <!-- <li nz-menu-item (click)="logout()">
+              <i nz-icon nzType="logout"></i>
+              <span>Logout</span>
+            </li> -->
         </ul>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
     <nz-header *ngIf="isLogged()">
-      <div class="app-header">
+      <div class="app-header" style="background: rgb(1, 7, 36);">
         <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
           <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
         </span>
+        <div style="float: right;margin-right: 20px;"><app-my-profile></app-my-profile></div>
       </div>
-    </nz-header>
-    <nz-content>
-      <div class="inner-content">
+    </nz-header>    
+    <nz-content >
+      <div class="inner-content" >
         <router-outlet></router-outlet>
-      </div>
+      </div>  
     </nz-content>
   </nz-layout>
 

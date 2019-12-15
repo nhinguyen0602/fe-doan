@@ -93,5 +93,12 @@ export class ProjectService {
     )
   }
 
+  editProject(id:number,project:Project):Observable<Project>{
+    const url=`${this.projectUrl}/${id}`;
+    return this.http.put<Project>(url,project).pipe(
+      catchError(this.handleError<Project>('editProject'))
+    )
+  }
+
 
 }

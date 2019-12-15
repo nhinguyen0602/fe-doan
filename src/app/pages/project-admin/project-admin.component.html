@@ -1,4 +1,4 @@
-    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false" #nzTable [nzData]="data" >
+    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false" #nzTable [nzData]="data" style="background: rgb(237, 243, 219);">
       <thead>
         <tr>
           <th nzCustomFilter>ID</th>
@@ -40,11 +40,11 @@
     </nz-table>
 
 <nz-modal [(nzVisible)]="isVisibleDayOff" nzTitle="" (nzOnCancel)="handleCancelDayOff()"
-(nzOnOk)="acceptDayOff()" >
-<p>Do you want accept request!</p>
+(nzOnOk)="acceptDayOff()" [nzClosable]="false">
+<p class="text-success">Do you want accept request!</p>
 </nz-modal>
 
 <nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
-              (nzOnOk)="rejectedDayOff()">
-              <p>Do you want reject request!</p>
+              (nzOnOk)="rejectedDayOff()" [nzClosable]="false">
+              <p class="text-danger">Do you want reject request!</p>
             </nz-modal>

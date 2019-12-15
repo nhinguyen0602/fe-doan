@@ -1,65 +1,87 @@
-<nz-select [(ngModel)]="selectedValue" [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear
-  nzPlaceHolder="Choose">
-  <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label" (onchange)="log($event)">
+<nz-select
+  [(ngModel)]="selectedValue"
+  [compareWith]="compareFn"
+  (ngModelChange)="changeYearDayOff($event)"
+  nzAllowClear
+  nzPlaceHolder="Choose"
+>
+  <nz-option
+    *ngFor="let option of optionList"
+    [nzValue]="option"
+    [nzLabel]="option.label"
+  >
   </nz-option>
 </nz-select>
 <nz-collapse [nzBordered]="false">
-  <nz-collapse-panel *ngFor="let user of users" [nzHeader]="user.email" (click)="getDayOffByUser(user.id)"
-    [nzActive]="false" >
+  <nz-collapse-panel
+    *ngFor="let panel of panelUser"
+    [nzHeader]="panel.user.email"
+    (click)="getDayOffByIdUser(panel.user.id)"
+    [nzActive]="panel.active"
+  >
     <div *ngIf="checkData(data); else showTable">
       <nz-empty></nz-empty>
     </div>
-    <ng-template #showTable>
-    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false" #nzTable [nzData]="data" >
-      <thead>
-        <tr>
-          <th nzCustomFilter>ID</th>
-          <th>Day Start Off</th>
-          <th>Day End Off</th>
-          <th>Description</th>
-          <th>Enable</th>
-          <th>Accept</th>
-          <th>Reject</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of nzTable.data">
-          <td>{{ data.id }}</td>
-          <td>{{ data.dayStartOff | date:'dd/MM/yyyy'}}</td>
-          <td>{{ data.dayEndOff | date:'dd/MM/yyyy' }}</td>
-          <td>{{ data.description }}</td>
-          <td>
-            <div *ngIf="data.status.name=='PENDING'">
-              <b style="color: darkorange;">Pending</b>
-            </div>
-            <div *ngIf="data.status.name=='APPROVED'">
-              <b style="color:forestgreen;">Approved</b>
-            </div>
-            <div *ngIf="data.status.name=='REJECTED'">
-              <b style="color:maroon;">Rejected</b>
-            </div>
-          </td>
-          <td>
-            <button nz-button [nzType]="'primary'" (click)="showModalDayOff(data.id)"
-            [disabled]="!checkStatus(data.status.name)"><span>Accept</span></button>
-          </td>
-          <td>
-            <button nz-button [nzType]="'danger'" (click)="reject(data.id)"
-            [disabled]="!checkStatus(data.status.name)"><span>Reject</span></button>       
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </ng-template>
   </nz-collapse-panel>
 </nz-collapse>
-
-<nz-modal [(nzVisible)]="isVisibleDayOff" nzTitle="" (nzOnCancel)="handleCancelDayOff()"
-(nzOnOk)="acceptDayOff(data.id)" >
-<p>Do you want accept request!</p>
-</nz-modal>
-
-<nz-modal [(nzVisible)]="isVisibleDayOff1" nzTitle="" (nzOnCancel)="handleCancelDayOff1()"
-              (nzOnOk)="rejectedDayOff(data.id)">
-              <p>Do you want reject request!</p>
-            </nz-modal>
+<ng-template #showTable>
+  <nz-table
+  
+    [nzFrontPagination]="false"
+    [nzShowPagination]="false"
+    #nzTable
+    [nzData]="data"
+    style="background: rgb(237, 243, 219);"
+  >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Start Day Off</th>
+        <th>End Day Off</th>
+        <th>Description</th>
+        <th>Enable</th>
+        <th>Accept</th>
+        <th>Reject</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of nzTable.data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.dayStartOff | date: "dd/MM/yyyy" }}</td>
+        <td>{{ data.dayEndOff | date: "dd/MM/yyyy" }}</td>
+        <td>{{ data.description }}</td>
+        <td>
+          <div *ngIf="data.status.name == 'PENDING'">
+            <b style="color: darkorange;">Pending</b>
+          </div>
+          <div *ngIf="data.status.name == 'REJECTED'">
+            <b style="color:maroon;">Rejected</b>
+          </div>
+          <div *ngIf="data.status.name == 'APPROVED'">
+            <b style="color:forestgreen;">Approved</b>
+          </div>
+        </td>
+        <td>
+          <button
+            nz-button
+            [nzType]="'primary'"
+            (click)="acceptDayOff(data)"
+            [disabled]="!checkStatus(data.status.name)"
+          >
+            <span>Accept</span>
+          </button>
+        </td>
+        <td>
+          <button
+            nz-button
+            [nzType]="'danger'"
+            (click)="rejectDayOff(data)"
+            [disabled]="!checkStatus(data.status.name)"
+          >
+            <span>Reject</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</ng-template>

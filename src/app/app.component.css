@@ -80,6 +80,10 @@ nz-content {
 
 .inner-content {
   padding: 24px;
-  background: #fff;
+  background:url('../assets/images/bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   flex: 1;
 }

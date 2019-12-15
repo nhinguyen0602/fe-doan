@@ -1,6 +1,10 @@
+import { CommonService } from './pages/profile/service/common/common.service';
+import { Profile } from './shared/models/profile';
+import { ShowProfileService } from './pages/profile/service/show-profile/show-profile.service';
 import {Component} from '@angular/core';
 import {AuthService} from './core/services/auth.service';
 import {Router} from '@angular/router';
+import { LoadingBarService } from '@ngx-loading-bar/core';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +14,10 @@ import {Router} from '@angular/router';
 export class AppComponent {
   isCollapsed: boolean;
   isAdminLoggin: boolean;
-  constructor(private authService: AuthService, private router: Router) {
+  public profilee: Profile;
+  constructor(private authService: AuthService, private router: Router,private showProfileService: ShowProfileService,public loader: LoadingBarService) {
+  }
+  ngOnInit() {
   }
 
   public isLogged(): boolean {
@@ -19,6 +26,7 @@ export class AppComponent {
   }
 
   public logout(): void {
+
     localStorage.removeItem("currentUser");
     this.isAdminLoggin = false;
     this.router.navigate(["/login"]);
@@ -31,4 +39,5 @@ export class AppComponent {
       error => {}
     );
   }
+  
 }

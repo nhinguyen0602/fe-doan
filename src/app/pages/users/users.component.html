@@ -1,0 +1,29 @@
+<div style="display: flex; ">
+<div style="display: flex;margin-right: 50px;" *ngFor="let user of users">
+<nz-card style="width: 300px;margin-top: 16px" [nzActions]="[actionSetting]">
+  <nz-skeleton [nzActive]="true" [nzLoading]="false" [nzAvatar]="{ size: 'large' }">
+    <nz-card-meta
+      [nzAvatar]="avatarTemplate"
+      [nzTitle]="user?.email"
+      [nzDescription]="description"
+    ></nz-card-meta>
+  </nz-skeleton>
+</nz-card>
+<ng-template #description>
+  <p>{{user?.address}}</p>
+  <p>{{user?.role}}</p>
+
+</ng-template>
+<ng-template #avatarTemplate>
+  <nz-avatar [nzSize]="50" [nzSrc]="'data:image/jpg;base64,'+user?.avatar"></nz-avatar>
+</ng-template>
+<ng-template #actionSetting>
+  <li nz-dropdown [nzDropdownMenu]="menu2" nzPlacement="bottomLeft"><i nz-icon nzType="setting"></i>Cấp quyền</li>
+</ng-template>
+    <nz-dropdown-menu #menu2="nzDropdownMenu">
+      <ul nz-menu>
+          <li nz-menu-item (click)="updateManage(user?.id)"><i nz-icon nzType="profile" nzTheme="outline" ></i>Manage</li>
+          <li nz-menu-item (click)="updateAdmin(user?.id)"><i nz-icon nzType="logout"></i> Admin </li>
+      </ul>
+    </nz-dropdown-menu>
+</div>

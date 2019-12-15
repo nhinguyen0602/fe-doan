@@ -1,15 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
 import { DayOff } from 'src/app/shared/models/day-off';
 import { TypeDay } from 'src/app/shared/models/type-day';
 import { DayoffService } from 'src/app/core/services/dayoff.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { User } from 'src/app/shared/models/user';
-import {Status} from 'src/app/shared/enum/status';
-import { Router } from '@angular/router';
-import { Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { from } from 'rxjs';
+import { Status } from 'src/app/shared/enum/status';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-dayoff',
@@ -17,74 +12,121 @@ import { from } from 'rxjs';
   styleUrls: ['./dayoff.component.scss']
 })
 export class DayoffComponent implements OnInit {
+  readonly YEAR_START: number = 2000;
 
-  optionList = [{ label: '2019', value: '2019' }, { label: '2020', value: '2020' }];
-  selectedValue = { label: '2019', value: '2019' };
-  compareFn = (o1: any, o2: any) => (o1 && o2 ? o1.value === o2.value : o1 === o2);
+  compareFn = (o1: any, o2: any) =>
+    o1 && o2 ? o1.value === o2.value : o1 === o2;
 
   data: DayOff[];
-  dayoff: DayOff;
   dayOffTypes: TypeDay[] = [];
   dayOffType: TypeDay;
-  users: User[];
-  year: number = 2019;
-  idUser: number;
+  year: number;
+  panelUser = [];
+  selectedValue = null;
+  optionList = [];
+  idUserActiveCurrent: number;
+  isChangeYearDayOff : boolean = false;
 
   constructor(
     private dayOffService: DayoffService,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    private message: NzMessageService
+  ) {}
 
   ngOnInit() {
     this.getUsers();
+    this.initOptionListYear();
   }
 
-  log(event) {
+  changeYearDayOff(event) {
     this.year = event.value;
+    this.isChangeYearDayOff = true;
+    this.getDayOffByIdUser(this.idUserActiveCurrent);
+  }
+
+  initOptionListYear() {
+    this.initCurrentYear();
+    const END_YEAR = this.year;
+    for (let i = this.YEAR_START; i <= END_YEAR; ++i) {
+      this.optionList.push({
+        label: i.toString(),
+        value: i.toString()
+      });
+    }
+  }
+
+  initCurrentYear() {
+    this.year = new Date().getFullYear();
+    this.selectedValue = {
+      label: this.year.toString(),
+      value: this.year.toString()
+    };
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe(users => this.users = users);
+    this.userService.getUsers().subscribe(users => {
+      users.forEach(element => {
+        this.panelUser.push({
+          active: false,
+          user: element
+        });
+      });
+    });
   }
 
-  getDayOffByUser(id: number) {
-    this.data = [];
-    this.dayOffService.getDayOffByUser(id, this.year).subscribe(data => this.data = data);
+  resetPanelUser(id: number): void {
+    let panelUserTemp = this.panelUser;
+    this.activePanelFollowIdUser(panelUserTemp, id);
+    this.panelUser = panelUserTemp;
   }
 
-  isVisibleDayOff = false;
-
-  showModalDayOff(id: number): void {
-    this.isVisibleDayOff = true;
-    this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
-    console.log(id)
+  activePanelFollowIdUser(panelUser: any, id: number) {
+    panelUser.forEach(element => {
+      element.active = false;
+      if (element.user.id === id) {
+        element.active = true;
+      }
+    });
   }
 
-  acceptDayOff(id: number): void {
-    this.isVisibleDayOff = false;
-    this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
-    this.dayOffService.acceptDayOff(this.dayoff).subscribe(dayoff => this.dayoff = dayoff);
-  }
-  handleCancelDayOff(): void {
-    this.isVisibleDayOff = false;
-  }
-
-  isVisibleDayOff1 = false;
-
-  reject(id: number): void {
-    this.isVisibleDayOff1 = true;
-    // const id = +data.id;
-    this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
+  getDayOffByIdUser(id: number) {
+    //=> purpose if command is avoid event click of nz-collapse-panel for table data dayoff
+    if (id != this.idUserActiveCurrent || this.isChangeYearDayOff == true) {
+      this.message.loading('Data loading...');
+      this.data = [];
+      this.idUserActiveCurrent = id;
+      this.resetPanelUser(id);
+      this.dayOffService.getDayOffByUser(id, this.year).subscribe(data => {
+        this.data = data;
+        this.isChangeYearDayOff = false;
+      });
+    }
   }
 
-  rejectedDayOff(id: number): void {
-    this.isVisibleDayOff1 = false;
-    this.dayOffService.getDayOff(id).subscribe(data => this.dayoff = data);
-    this.dayOffService.rejectDayOff(this.dayoff).subscribe(dayoff => this.dayoff = dayoff);
+  acceptDayOff(data: DayOff): void {
+    const id = +data.id;
+    this.dayOffService.acceptDayOff(id).subscribe(dayoff => {
+      this.setStatusDayOffFollowIdStatus(id, Status.approved);
+    });
   }
-  handleCancelDayOff1(): void {
-    this.isVisibleDayOff1 = false;
+
+  rejectDayOff(data: DayOff): void {
+    const id = +data.id;
+    this.dayOffService.rejectDayOff(id).subscribe(dayoff => {
+      this.setStatusDayOffFollowIdStatus(id, Status.rejected);
+    });
   }
+
+  setStatusDayOffFollowIdStatus(id: number, nameStatus: string) {
+    this.data.forEach(element => {
+      if (element.id == id) {
+        element.status.name = nameStatus;
+        this.checkStatus(element.status.name.toString());
+      }
+      return;
+    });
+  }
+
   checkStatus(status: string) {
     if (status == Status.pending) {
       return true;

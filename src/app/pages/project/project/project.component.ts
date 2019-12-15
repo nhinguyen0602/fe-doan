@@ -64,7 +64,6 @@ export class ProjectComponent implements OnInit {
   handleCancel(): void {
     this.isVisible = false;
   }
-
   onSubmit() {
     this.submitted = true;
     if (this.requestForm.invalid) {
@@ -97,7 +96,6 @@ export class ProjectComponent implements OnInit {
       this.users = users
       for( this.i=0 ;this.i<users.length;this.i++){
         this.suggestions[this.i]=users[this.i].email
-        console.log(users[this.i].avatarBase64)
       }
 
     });
@@ -142,5 +140,20 @@ export class ProjectComponent implements OnInit {
   cancel(): void {
     this.nzMessageService.info('click cancel');
   }
+
+  currentProject:number=0;
+
+  editProject(id:number){
+    this.currentProject=id;
+ }
+
+ saveProject(id:number,project1:Project){
+  this.projectService.editProject(id,project1).subscribe(data=>{
+    this.project=data
+    this.getProjectsByUser();
+  })
+  this.currentProject=0;
+  
+}
 
 }

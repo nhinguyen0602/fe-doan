@@ -1,8 +1,8 @@
+import { Profile } from './../../../../shared/models/profile';
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-import { Profile } from "../../../../shared/models/profile";
 import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: "root"
@@ -12,6 +12,10 @@ export class ShowProfileService {
 
   getProfileFollowId(id: number): Observable<Profile> {
     let api = environment.apiUrl + "/profiles/user?idUser=" + id;
+    return this.http.get<Profile>(api);
+  }
+  getProfile():Observable<Profile>{
+    let api = environment.apiUrl + "/profiles";
     return this.http.get<Profile>(api);
   }
 }

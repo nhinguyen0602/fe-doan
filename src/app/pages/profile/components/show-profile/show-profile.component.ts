@@ -34,6 +34,7 @@ export class ShowProfileComponent implements OnInit {
     private message: NzMessageService
   ) {}
 
+  
   ngOnInit() {
     this.loadProfile();
   }

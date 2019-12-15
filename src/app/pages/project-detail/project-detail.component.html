@@ -1,7 +1,7 @@
 <!-- ---------------------------------------- -->
-<div style="display: block;">
-<i nz-icon nzType="home" nzTheme="outline" style="font-size: 30px;display: inline-block;color: chocolate;"></i>
-<h1 style="display: inline-block;margin-left: 3px;color:darkcyan;">{{project?.name}}</h1>
+<div style="display: flex;">
+<i nz-icon nzType="home" nzTheme="outline" style="font-size: 40px;display: inline-block;color: chocolate;"></i>
+<h1 style="display: inline-block;margin-left: 7px;color:rgb(24, 88, 67);">{{project?.name}}</h1>
 </div>
 <nz-modal [(nzVisible)]="isVisible" nzTitle="<i>New Tab<i>" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
   <form nz-form [nzLayout]="'inline'" [formGroup]="requestForm" (ngSubmit)="onSubmit()">
@@ -17,24 +17,29 @@
 </nz-modal>
 <nz-tabset [nzTabBarExtraContent]="extraTemplate">
   <div *ngFor="let card of cards">
-    <nz-tab nzTitle="{{card.name}}" (nzClick)="getTasksByCard(card.id)">
+    <nz-tab style="font-size: 20px;color: darkred;" nzType ="card" [nzTitle]="TabName" (nzClick)="getTasksByCard(card.id)">
+      <ng-template #TabName>
+        <b style="font-size: 20px;color: rgb(1, 56, 38);">{{card?.name}}</b>
+      </ng-template>
       <div *ngFor="let task of tasks">
-        <nz-card nzType="inner" style="margin-top:16px;" nzTitle="{{task.name}}" [nzExtra]="extraTask"
+        <nz-card nzType="inner" [nzTitle]="taskname" [nzExtra]="extraTask"
           [nzBordered]="true"
-          style="border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
+          style="margin-top:16px;border-radius: 7px;padding: 3px;border-color:cadetblue;background:#f5f4c9;">
+          <ng-template #taskname>
+            <b style="color: teal;font-size: 20px;">{{task.name}}</b>
+          </ng-template>
           <div style="display: block;">
             <ng-container *ngIf="currentTask!=task.id;else inputEditTask">
-              <a style="display: inline-block;">{{task.description}}</a>
+              <a style="display: inline-block;font-size: 20px;">{{task.description}}</a>
+              <i nz-icon nzType="clock-circle" style="display: inline-block;color:red;font-size: 20px;float: right;"></i>
+              <countdown-timer style="display: inline-block;color:red;font-size: 20px;float: right;" [end]="task.deadline | date:'yyyy-MM-dd HH:mm:ss'"></countdown-timer>
             </ng-container>
             <ng-template style="display: block;" #inputEditTask>
               <input type="text" nz-input nzSize="default" style="width: 300px;display:inline-block" [(ngModel)]="task.description"/>
               <button nz-button style="display: inline-block;margin-left: 5px;" nzType="default" (click)="saveTask(task.id,task.description)" >Save</button>
+              <i nz-icon nzType="clock-circle" style="display: inline-block;color:red;font-size: 20px;float: right;"></i>
+              <countdown-timer style="display: inline-block;color:red;font-size: 20px;float: right;" [end]="task.deadline | date:'yyyy-MM-dd HH:mm:ss'"></countdown-timer>
             </ng-template>
-            <!-- <p> revertDate(task.deadline)" | date:'yyyy-MM-dd HH:mm:ss'</p> -->
-            <div style="display: block;">
-                <!-- <i nz-icon nzType="clock-circle" style="display: inline-block;margin-left:710px;color:red;"></i>  -->
-            <countdown-timer style="display: inline-block;margin-left: 850px;color:red;" [end]="task.deadline | date:'yyyy-MM-dd HH:mm:ss'"></countdown-timer>
-              </div>
           </div>
           <nz-progress nzType="line" [nzPercent]="task.process"
               [nzStrokeColor]="{ '0%': '#f44336', '100%': '#87d068' }"></nz-progress>
@@ -53,8 +58,9 @@
               </ul>
             </nz-dropdown-menu>
 
+
             <!-- --------------edit delete task------------------------- -->
-            <button nz-button nz-dropdown style="margin-left: 15px;" [nzDropdownMenu]="menu">
+            <button nz-button [disabled]="true" nz-dropdown style="margin-left: 15px;"  [nzDropdownMenu]="menu">
               <b>. . .</b> 
               </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
@@ -76,7 +82,7 @@
         <br>
       </div>
       <nz-card nzType="inner" nzTitle="  " [nzBordered]="true"
-        style="margin-top:16px;text-align-last: center;border-radius: 5px;padding: 0px;border-color:rgb(171, 219, 203);background:rgb(236, 248, 244),;">
+        style="margin-top:16px;text-align-last: center;border-radius: 5px;padding: 0px;border-color:cadetblue;background:#f5f4c9;">
         <i nz-icon (click)="showModalTask()" nzType="plus-circle" nzTheme="fill"
           style="font-size: 30px;color: rgb(51, 201, 247);"></i>
       </nz-card>
@@ -84,7 +90,7 @@
   </div>
 </nz-tabset>
 <ng-template #extraTemplate>
-  <button nz-button (click)="showModal()">New tab</button>
+  <button type="button" class="btn btn-info" (click)="showModal()">New tab</button>
 </ng-template>
 <nz-modal style="text-align-last: center;" [(nzVisible)]="isSuccess" [nzClosable]="false">
   <nz-alert nzType="success" nzMessage="Success Tips" nzShowIcon></nz-alert>
@@ -95,6 +101,7 @@
 </nz-modal>
 
 <!-- addTask -->
+
 
 <nz-modal [(nzVisible)]="isVisibleTask" nzTitle="<i>New Task</i>" (nzOnCancel)="handleCancelTask()"
   (nzOnOk)="onSubmitTask()">
@@ -120,7 +127,7 @@
 
 <!-- show job -->
 
-<nz-modal [(nzVisible)]="isVisibleJob" [nzClosable]="false" [nzTitle]="modalTitle" [nzContent]="modalContent"
+<nz-modal [(nzVisible)]="isVisibleJob" style="background: rgb(247, 240, 233);" [nzClosable]="false" [nzTitle]="modalTitle" [nzContent]="modalContent"
   [nzFooter]="modalFooter">
   <ng-template #modalTitle>
     <div style="display: block;">
@@ -133,14 +140,42 @@
     nzShowTime
     nzFormat="HH:mm:ss dd-MM-yyyy "
     nzPlaceHolder="Select Time"
-    [ngModel]="date"
+    [(ngModel)]="date"
     (ngModelChange)="onChange($event)"
    (nzOnOk)="onOk($event)"
+   [disabled]="!isAdmin"
   ></nz-date-picker>
   </div>
   </ng-template>
 
   <ng-template #modalContent>
+    <div style="display: flex ;font-size: 20px;float: right ; ">
+      <div *ngFor="let data of userOfTask">
+          <nz-avatar style="display: inline-block;margin-right: 5px;"
+          nzSrc="{{'data:image/jpg;base64,'+data.avatar}}" nz-popconfirm
+          nzPopconfirmTitle="remove {{data.email}}" nzPopconfirmPlacement="bottom"
+          (nzOnConfirm)="confirmRemoveUser(data.email)" 
+          >
+          </nz-avatar>
+      </div>
+      <nz-button-group style="display: inline-block;float: right;font-size: 17px;">
+          <button type="button" class="btn" nz-dropdown style="float: right;font-size: 15px;margin-bottom: 10px;" [disabled]="!isAdmin" [nzDropdownMenu]="menu2" nzPlacement="bottomLeft">
+              <i nz-icon nzType="user-add" nzTheme="outline" style="font-size: 25px;"></i>
+          </button>
+        </nz-button-group>
+        <nz-dropdown-menu #menu2="nzDropdownMenu">
+          <ul nz-menu>
+            <div *ngFor="let user of userOfProject">
+              <div style="display: block;">
+                <nz-avatar style="display: inline-block;"
+                nzSrc="{{'data:image/jpg;base64,'+user.avatar}}">
+                </nz-avatar>
+                <li nz-menu-item style="display: inline-block;" (click)="setUserOfTask(user.email)">{{user.email}}</li>
+              </div>
+            </div>
+          </ul>
+        </nz-dropdown-menu>
+    </div><br>   
     <div style="display: block;">
       <i nz-icon nzType="unordered-list" nzTheme="outline" style="display: inline-block;"></i>
       <b style="display: inline-block;margin-left: 5px;">Check list</b>
@@ -220,5 +255,14 @@
     <button nz-button nzType="default" (click)="handleCancelJob()">Close</button>
   </ng-template>
 </nz-modal>
+
+<nz-spin nzTip="Loading..." [nzSpinning]="isLoadingResult">
+  <!-- <nz-alert
+    nzType="info"
+    nzMessage="Alert message title"
+    nzDescription="Further details about the context of this alert."
+  >
+  </nz-alert> -->
+</nz-spin>
  
 
